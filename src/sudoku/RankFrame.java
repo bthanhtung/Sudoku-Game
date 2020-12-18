@@ -1,26 +1,15 @@
-/**
- * RankFrame.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that contains a GUI for displaying the user's best puzzle completion times.
- * Contains a table that organizes the top 10 times by puzzle difficulty. Also
- * contains a button for clearing the best times, and a back button for returning
- * to the MainFrame.
- */
 package sudoku;
 
-
-/* Imports */
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import javax.swing.JFrame;
 
 public class RankFrame extends JFrame {
 
-    /* Default constructor */
+    // Hàm xây dựng mặc định
     public RankFrame(int x, int y) {
 
-        /* Initialize components */
+        // Khởi tạo các thành phần
         initComponents();
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(
                 "icons/sudoku_icon.png")));
@@ -28,7 +17,7 @@ public class RankFrame extends JFrame {
         this.setLocation(x, y);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        /* Sets the table's headers and column width sizes */
+        // Đặt header cho bảng và chiều rộng cột
         this.noviceTable.getTableHeader().setReorderingAllowed(false);
         this.noviceTable.getColumn("Rank").setMinWidth(75);
         this.noviceTable.getColumn("Rank").setMaxWidth(75);
@@ -55,32 +44,29 @@ public class RankFrame extends JFrame {
         this.expertTable.getColumn("Date").setMinWidth(225);
         this.expertTable.getColumn("Date").setMaxWidth(225);
 
-        /* Asks user if they're sure when closing the window. */
+        // Xác nhận khi đóng cửa sổ
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
-                if (WindowUtility.askYesNo("Are you sure you want to quit?",
-                        "Quitting")) {
+                if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
+                        "Đang thoát...")) {
                     FileUtility.saveBestTimes();
                     System.exit(0);
                 }
             }
         });
 
-        /* Display the times in the tables, set the UI visible to user */
+        // Hiển thị thời gian trong bảng, đặt UI hiển thị cho người dùng
         this.bindToTable();
         this.setVisible(true);
     }
 
 
-    /**
-     * Writes the user's best times stored inside the best times lists into the
-     * tables.
-     */
+    // Ghi best-time được lưu bên trong list vào bảng
     private void bindToTable() {
 
-        /* Writes data to novice difficulty table */
+        // Ghi data với độ khó novice vào bảng
         int i = 0;
         for (HighScoreNode n : BestTimes.novice) {
             this.noviceTable.setValueAt(BestTimes.timeToString(n.getScore()), i, 1);
@@ -88,7 +74,7 @@ public class RankFrame extends JFrame {
             i++;
         }
 
-        /* Writes data to easy difficulty table */
+        // Ghi data với độ khó easy vào bảng
         i = 0;
         for (HighScoreNode n : BestTimes.easy) {
             this.easyTable.setValueAt(BestTimes.timeToString(n.getScore()), i, 1);
@@ -96,7 +82,7 @@ public class RankFrame extends JFrame {
             i++;
         }
 
-        /* Writes data to medium difficulty table */
+        // Ghi data với độ khó medium vào bảng
         i = 0;
         for (HighScoreNode n : BestTimes.medium) {
             this.mediumTable.setValueAt(BestTimes.timeToString(n.getScore()), i, 1);
@@ -104,7 +90,7 @@ public class RankFrame extends JFrame {
             i++;
         }
 
-        /* Writes data to hard difficulty table */
+        // Ghi data với độ khó hard vào bảng
         i = 0;
         for (HighScoreNode n : BestTimes.hard) {
             this.hardTable.setValueAt(BestTimes.timeToString(n.getScore()), i, 1);
@@ -112,7 +98,7 @@ public class RankFrame extends JFrame {
             i++;
         }
 
-        /* Writes data to expert difficulty table */
+        // Ghi data với độ khó expert vào bảng
         i = 0;
         for (HighScoreNode n : BestTimes.expert) {
             this.expertTable.setValueAt(BestTimes.timeToString(n.getScore()), i, 1);
@@ -122,53 +108,49 @@ public class RankFrame extends JFrame {
     }
 
 
-    /**
-     * Resets the currently selected table's data. This erases all the data
-     * displayed inside the selected table, as well as deletes the user's best
-     * times form the associated list. Invoked when user clicks the reset button.
-     */
+    // Đặt lại dữ liệu của bảng - Xóa tất cả dữ liệu được lưu trong bảng
     private void reset() {
 
-        /* Ask user if they're sure, abort if not */
+        // Xác nhận lại
         if (!WindowUtility.askYesNo("You are about to delete all your best times for this difficulty.\n"
                 + "Are your sure you want to reset?", "Warning!"))
             return;
 
-        /* Chooses the selected table to reset */
+        // Chọn bảng để reset
         int i = this.timesTable.getSelectedIndex();
         if (i == -1)
             return;
 
         switch (i) {
-            case 0: /* User requests resetting the novice table */
+            case 0: // reset lại bảng novice
                 BestTimes.novice.clear();
                 for (int j = 0; j < 10; j++) {
                     this.noviceTable.setValueAt("", j, 1);
                     this.noviceTable.setValueAt("", j, 2);
                 }
                 break;
-            case 1: /* User requests resetting the easy table */
+            case 1: // reset lại bảng easy
                 BestTimes.easy.clear();
                 for (int j = 0; j < 10; j++) {
                     this.easyTable.setValueAt("", j, 1);
                     this.easyTable.setValueAt("", j, 2);
                 }
                 break;
-            case 2: /* User requests resetting the medium table */
+            case 2: // reset lại bảng medium
                 BestTimes.medium.clear();
                 for (int j = 0; j < 10; j++) {
                     this.mediumTable.setValueAt("", j, 1);
                     this.mediumTable.setValueAt("", j, 2);
                 }
                 break;
-            case 3: /* User requests resetting the hard table */
+            case 3: // reset lại bảng hard
                 BestTimes.hard.clear();
                 for (int j = 0; j < 10; j++) {
                     this.hardTable.setValueAt("", j, 1);
                     this.hardTable.setValueAt("", j, 2);
                 }
                 break;
-            default:    /* User requests resetting the expert table */
+            default:    // reset lại bảng expert
                 BestTimes.expert.clear();
                 for (int j = 0; j < 10; j++) {
                     this.expertTable.setValueAt("", j, 1);

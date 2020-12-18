@@ -5,14 +5,14 @@
             <url>src/sudoku/SudokuFrame.java</url>
             <bookmark id="1">
                 <name/>
-                <line>45</line>
+                <line>36</line>
                 <key/>
             </bookmark>
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/SudokuPuzzle.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/SudokuFrame.java</file>
         </group>
     </open-files>
 </project-private>

@@ -1,71 +1,43 @@
-/**
- * HighScoreNode.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that represents a node to be stored inside the array lists used
- * to store the user's highest scores. The node class can hold a score (int) and
- * will construct and store a date (String) as well. Also contains a comparator to
- * compare other scores.
- */
 package sudoku;
 
-
-/* Imports */
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HighScoreNode implements Comparable<HighScoreNode> {
 
-    /* Declare private members */
+    // Khai báo cácc biến thành viên
     private final int score;
     private String date;
 
 
-    /* Default constructor */
+    // Hàm xây dựng
     public HighScoreNode(int score) {
         this.score = score;
         this.date = new SimpleDateFormat("MM/dd/yyyy  h:mm a").format(new Date());
     }
 
 
-    /**
-     * Returns the score stored inside the node.
-     *
-     * @return The score stored in the node.
-     */
+    // Trả về score được lưu bên trong node
     public int getScore() {
         return this.score;
     }
 
 
-    /**
-     * Returns the date in a string format that was formed in the constructor
-     * and associated with the stored score.
-     *
-     * @return A string representing the date the score was added.
-     */
+    // Trả về ngày ở định dạng chuỗi (đã được định dạng trước đó)
     public String getDate() {
         return this.date;
     }
 
 
-    /**
-     * Sets the stored date to the specified date string.
-     *
-     * @param date The new date string to store.
-     */
+    // Đặt ngày được lưu trữ thành ngày được chỉ định
+    // date: ngày (mới) để lưu trữ
     public void setDate(String date) {
         this.date = date;
     }
 
 
-    /**
-     * Returns an integer representing the result of comparing two nodes. Returns
-     * 0 if the nodes' stored scores are equal, 1 if this node's score is greater
-     * than the other's, or -1 if less than the other's.
-     *
-     * @param other The other node to compare with.
-     */
+    // So sánh hai node
+    // other: node khác để so sánh
     @Override
     public int compareTo(HighScoreNode other) {
         if (this.getScore() < other.getScore())
@@ -75,4 +47,4 @@ public class HighScoreNode implements Comparable<HighScoreNode> {
         else return 0;
     }
 
-} // End HighScoreNode class
+}

@@ -1,43 +1,35 @@
-/**
- * SudokuPuzzle.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that represents a Sudoku puzzle. A string is passed into the constructor
- * containing 81 characters/numbers, and the board is constructed from that.
- * The board is represetned as a 9x9 2-dimensional integer array.
- */
 package sudoku;
 
 
 public class SudokuPuzzle {
 
-    /* Declare private members */
+    // Khai báo các biến private
     private int difficulty;
     private String initialState;
     private int[][] board;
 
 
-    /* Default constructor */
+    // Hàm xây dựng được truyền vào 81 kí tự số
     public SudokuPuzzle() {
         this("000000000000000000000000000000000000000000000000000000000000000000000000000000000");
     }
 
 
-    /* Secondary constructor, takes a string representing the puzzle's initial state */
+    // Hàm xây dựng có đối số, nhận vào trạng thái ban đầu của puzzle
     public SudokuPuzzle(String init) {
 
-        /* Declares/initializes variables */
+        // Khai báo & khởi tạo các biến
         this.difficulty = 0;
         this.initialState = init;
         this.board = new int[9][9];
         char[] chars = init.toCharArray();
         int temp, index = 0;
 
-        /* Loops through the given string, parsing each value and setting up the board */
+        // Lặp qua chuỗi đã cho để thiết lập bảng
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 temp = Character.getNumericValue(chars[index++]);
-                if (temp == -1)     /* Non-integers in string are set as 0 */
+                if (temp == -1)     // Nếu không phải số nguyên thì được đặt là 0
                     this.board[i][j] = 0;
                 else
                     this.board[i][j] = temp;
@@ -45,17 +37,11 @@ public class SudokuPuzzle {
         }
     }
 
-
-    /**
-     * Inserts the specified number into the sudoku board and the specified
-     * coordinates. If the number inserted was a legal number, true is returned,
-     * or false if not.
-     *
-     * @param val The number to insert into the Sudoku board, must be 1-9.
-     * @param r The row to insert the number into.
-     * @param c The column to insert the number into.
-     * @return True if the number insertion was legal, false if not.
-     */
+    // Chèn các số được chỉ định vào bảng và vị trí (x,y)
+    // Nếu số hợp lệ -> true, không hợp lệ -> false
+    // val: số để chèn vào sudoku board, 1-9
+    // r: hàng để chèn số vào
+    // c: cột để chèn số vào
     public boolean insert(int val, int r, int c) {
         if (1 > val || val > 9 || 0 > r || r > 8 || 0 > c || c > 8)
             return false;
@@ -65,29 +51,17 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Removes the value at the specified coordinates from the Sudoku board.
-     *
-     * @param r The row the value is in to be deleted.
-     * @param c The column the value is in to be deleted.
-     */
+    // Xóa giá trị tại vị trí được chỉ định khỏi Sudoku board.
+    // r: hàng có giá trị bị xóa
+    // c: cột có giá trị bị xóa
     public void remove(int r, int c) {
         if (0 > r || r > 8 || 0 > c || c > 8)
             return;
         this.board[r][c] = 0;
     }
 
-
-    /**
-     * Returns a list of booleans representing the list of legal numbers that
-     * can be inserted into the specified square. Index 0 represents a 1, index
-     * 1 represents a 2, and so forth. True indicates that the number is legal,
-     * and false indicates it is not.
-     *
-     * @param r The row the tile is in.
-     * @param c The column the tile is in.
-     * @return A list of booleans representing the legal moves to make.
-     */
+    // Trả về danh sách các số hợp lệ có thể chèn được vào ô đang chỉ định
+    // r: row | c: column
     public boolean[] getLegalMoves(int r, int c) {
         boolean[] legalMoves = {true, true, true, true, true, true, true, true, true};
         legalMoves = this.legalMovesInRow(r, c, legalMoves);
@@ -97,25 +71,16 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Returns the number held at the specified tile on the board. If the tile
-     * is empty, 0 is returned.
-     *
-     * @param r The row to get the value at.
-     * @param c The column to get the value at.
-     * @return The number in the specified tile, or 0 if it's empty.
-     */
+    // Trả về số được chỉ định trên board. Nếu trống --> 0
+    // r: hàng nhận giá trị
+    // c: cột nhận giá trị
     public int getValue(int r, int c) {
         return this.board[r][c];
     }
 
 
-    /**
-     * Returns true if this puzzle can be solved, that is, no row, column, or sub
-     * grid currently contains any duplicate numbers.
-     *
-     * @return True if the current state of the puzzle is solvable, false if not.
-     */
+    // Trả về true nếu Puzzle có thể giải được - không có hàng | cột | block nào trùng.
+    // Nếu không --> false
     public boolean isPossible() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -130,27 +95,24 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Checks the Sudoku puzzle for completeness. Returns true if the puzzle is
-     * complete and all constraints are satisfied, or false if otherwise.
-     *
-     * @return True if the puzzle is complete, or false if not.
-     */
+    // Kiểm tra xem Puzzle đã giải hoàn chỉnh chưa
+    // Nếu chưa --> false, ngược lại --> true
+
     public boolean isComplete() {
 
-        /* Check all rows */
+        // Kiểm tra tất cả các hàng
         for (int i = 0; i < 9; i++) {
             if (!this.rowIsComplete(i))
                 return false;
         }
 
-        /* Check all columns */
+        // Kiểm tra tất cả các cột
         for (int i = 0; i < 9; i++) {
             if (!this.columnIsComplete(i))
                 return false;
         }
 
-        /* Check all subgrids */
+        // Kiểm tra các lưới con (block)
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (!this.subGridIsComplete(i * 3, j * 3))
@@ -158,14 +120,12 @@ public class SudokuPuzzle {
             }
         }
 
-        /* All constraints satisfied */
+        // Tất cả các cràng buộc ddều thỏa mã
         return true;
     }
 
 
-    /**
-     * Prints out the sudoku puzzle in the command prompt.
-     */
+    // In Sudoku Puzzle 
     public void print() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -183,10 +143,7 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Resets the Sudoku puzzle back to it's initial starting state. Invoked
-     * when the user resets the game.
-     */
+    // Đặt lại Sudoku Puzzle về trạng thái ban đầu
     public void resetPuzzle() {
         this.board = new int[9][9];
         char[] chars = this.initialState.toCharArray();
@@ -204,10 +161,7 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Completely resets the puzzle back to an empty state, and resets the
-     * puzzle states.
-     */
+    // Hoàn toàn đặt lại Puzzle về trạng thái trống và đặt lại trạng thái puzzle
     protected void hardReset() {
         for (int i = 0; i < 9; i++)
             for (int j = 0; j < 9; j++)
@@ -216,12 +170,7 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Returns the number of filled tiles in the puzzle. A tile is filled if it
-     * holds a number 1-9.
-     *
-     * @return The number of tiles filled on the Sudoku puzzle, from 0-81.
-     */
+    // Trả về các số đã được fill trong puzzle 
     protected int getNumberFilled() {
         int amt = 0;
         for (int i = 0; i < 9; i++) {
@@ -234,18 +183,11 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Returns a string representation of the list of the squares in the Sudoku
-     * puzzle that conflict with the given tile. The string contains the list
-     * of these tiles in the format "(i, j) (i, j) (i, j)...", where i is
-     * the row and j is the column. Used for highlighting other tiles that
-     * conflict with an illegal insertion.
-     *
-     * @param r The row of the tile.
-     * @param c The column of the tile.
-     * @return The string containing the conflicting squares, to be extracted
-     * for highlighting.
-     */
+    // Trả về danh sách các ô xung đột trong puzzle
+    // Chuỗi chứa danh sách các ô này có định dạng "(i, j) (i, j) (i, j) ..."
+    // trong đó i là hàng và j là cột.
+    // r: row, c: column
+    // Các ô xung đột sẽ được làm nổi bật
     protected String getConflictingSquares(int r, int c) {
         String str = "";
         str = this.getConflictingRow(r, c, str);
@@ -255,77 +197,51 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Returns a 2-d integer array representing the Sudoku board.
-     *
-     * @return The 2-d array representing the Sudoku board.
-     */
+    //  Trả về mảng số nguyên 2 chiều đại diện cho Sudoku board
     public int[][] toArray() {
         return this.board;
     }
 
 
-    /**
-     * Sets the Sudoku board to the specified 2-d integer array. Used after
-     * being passed through the Sudoku solver and uploading to the UI.
-     *
-     * @param b The array to set the sudoku board to.
-     */
+    // Đặt Sudoku board thành mảng số nguyên 2 chiều được chỉ định. 
+    // Được sử dụng sau khi được chuyển qua Sudoku Solver và tải lên giao diện người dùng.
+    // b: mảng để đặt Sudoku board
     protected void setArray(int[][] b) {
         this.board = b;
     }
 
 
-    /**
-     * Returns the puzzle's difficulty, ranging 1 to 5 from easiest to hardest.
-     * Used to display the difficulty in the Sudoku JFrame.
-     *
-     * @return The puzzle's dificulty, from 1-5.
-     */
+    // Trả về độ khó của puzzle (1-5)
+    // Hiện thị trong Sudoku JFrame
     protected int getDifficulty() {
         return this.difficulty;
     }
 
 
-    /**
-     * Sets the puzzle's difficulty to the specified number. Used to display the
-     * difficulty in the Sudoku JFrame.
-     *
-     * @param d The number to set the puzzle difficulty to.
-     */
+    // Đặt độ khó của puzzle
+    // d = difficulty
     protected void setDifficulty(int d) {
         this.difficulty = d;
     }
 
 
-    /**
-     * Returns the string representing the Sudoku puzzle when it was first
-     * created. Used for saving the user's progress midgame.
-     *
-     * @return A string representing the initial state of the Sudoku puzzle.
-     */
+    // Trả về chuỗi đại diện cho puzzle khi nó được khởi tạo
+    // Dùng để lưu tiến trình trò chơi (progress midgame)
     protected String initialPuzzleState() {
         return this.initialState;
     }
 
 
-    /**
-     * Sets the Sudoku's initial state to the specified string. Used for saving
-     * modified custom puzzles.
-     *
-     * @param s The initial state to set the puzzle in.
-     */
+    // Đặt trạng thái ban đầu của Sudoku
+    // s: trạng thái ban đầu đề đặt puzzle
+
     protected void setInitialPuzzleState(String s) {
         this.initialState = s;
     }
 
 
-    /**
-     * Returns the string representing the Sudoku puzzle in its current state.
-     * Used for saving the user's progress midgame.
-     *
-     * @return A string representing the current state of the Sudoku puzzle.
-     */
+    // Trả về chuỗi sudoku puzzle ở trạng thái hiện tại của nó.
+    // Dùng để lưu tiến trình trò chơi (progress midgame)
     protected String currentPuzzleState() {
         String s = "";
         for (int i = 0; i < 9; i++) {
@@ -336,20 +252,7 @@ public class SudokuPuzzle {
         return s;
     }
 
-
-    ////////////////////////////////////////////////////////
-    //       --- Completion Checker Methods --            //
-    //  These methods are invoked when checking the       //
-    //  sudoku board for completeness. Contains a         //
-    //  method for checking a row, a column, and one for  //
-    //  the subgrid.                                      //
-    ////////////////////////////////////////////////////////
-    //<editor-fold defaultstate="collapsed" desc=" Sudoku puzzle checking functions ">
-
-    /**
-     * Returns true if the specified row is complete, as in, it contains all
-     * numbers 1-9, or false if not.
-     */
+    // Trả về true nếu hàng hợp lệ
     private boolean rowIsComplete(int r) {
         boolean[] row = {false, false, false, false, false, false, false, false, false};
         for (int i = 0; i < 9; i++) {
@@ -363,10 +266,7 @@ public class SudokuPuzzle {
         return true;
     }
 
-    /**
-     * Returns true if the specified column is complete, as in, it contains all
-     * numbers 1-9, or false if not.
-     */
+    // Trả về true nếu cột hợp lệ
     private boolean columnIsComplete(int c) {
         boolean[] row = {false, false, false, false, false, false, false, false, false};
         for (int i = 0; i < 9; i++) {
@@ -380,10 +280,7 @@ public class SudokuPuzzle {
         return true;
     }
 
-    /**
-     * Returns true if the subgrid at the specified location is complete, as in,
-     * it contains all numbers 1-9, or false if not.
-     */
+    // Trả về true nếu sub-grid hợp lệ
     private boolean subGridIsComplete(int r, int c) {
         boolean[] grid = {false, false, false, false, false, false, false, false, false};
         for (int i = 0; i < 3; i++) {
@@ -400,22 +297,8 @@ public class SudokuPuzzle {
         }
         return true;
     }
-    //</editor-fold>
 
-    ////////////////////////////////////////////////////////
-    //       --- Conflicting Square Methods --            //
-    //  These methods are invoked when checking a space   //
-    //  on the sudoku board for the list of squares that  //
-    //  conflict with the given square. Contains a method //
-    //  for checking a row, a column, and one for the     //
-    //  subgrid.                                          //
-    ////////////////////////////////////////////////////////
-    //<editor-fold defaultstate="collapsed" desc=" Sudoku puzzle illegal checker functions ">
-
-    /**
-     * Returns a string of coordinates of the tiles in the row that conflict
-     * with the specified tile.
-     */
+    // Trả về các ô xung đột trong hàng
     private String getConflictingRow(int r, int c, String squares) {
 
         for (int k = 0; k < 9; k++) {
@@ -429,10 +312,7 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Returns a string of coordinates of the tiles in the column that conflict
-     * with the specified tile.
-     */
+    // Trả về các ô xung đột trong cột
     private String getConflictingColumn(int c, int r, String squares) {
         for (int k = 0; k < 9; k++) {
             if (k == r)
@@ -444,10 +324,7 @@ public class SudokuPuzzle {
     }
 
 
-    /**
-     * Returns a string of coordinates of the tiles in the subgrid that conflict
-     * with the specified tile.
-     */
+    // Trả về các ô xung đột trong sub-grid
     private String getConflictingSubGrid(int r, int c, String squares) {
          for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -461,20 +338,8 @@ public class SudokuPuzzle {
         }
         return squares;
     }
-    //</editor-fold>
 
-    ////////////////////////////////////////////////////////
-    //       --- Legal Moves Helper Methods --            //
-    //  These methods are invoked when checking a space   //
-    //  on the sudoku board for the list of legal moves.  //
-    //  Contains a method for checking a row, a column,   //
-    //  and one for the subgrid.                          //
-    ////////////////////////////////////////////////////////
-    //<editor-fold defaultstate="collapsed" desc=" Sudoku puzzle legal moves checker functions ">
-
-    /**
-     * Returns an array of moves that are legal within the specified row.
-     */
+    // Trả về một mảng hợp lệ trong hàng
     private boolean[] legalMovesInRow(int r, int c, boolean[] list) {
         for (int i = 0; i < 9; i++) {
             if (i == c)
@@ -485,9 +350,7 @@ public class SudokuPuzzle {
         return list;
     }
 
-    /**
-     * Returns an array of moves that are legal within the specified column.
-     */
+   // Trả về một mảng hợp lệ trong cột
     private boolean[] legalMovesInColumn(int c, int r, boolean[] list) {
         for (int i = 0; i < 9; i++) {
             if (i == r)
@@ -498,9 +361,7 @@ public class SudokuPuzzle {
         return list;
     }
 
-    /**
-     * Returns an array of moves that are legal within the specified subgrid.
-     */
+    // Trả về mộtt mảng hợp lệ trong sub-grid
     private boolean[] legalMovesInSubGrid(int r, int c, boolean[] list) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -514,6 +375,4 @@ public class SudokuPuzzle {
         }
         return list;
     }
-    //</editor-fold>
-
-} // End SudokuPuzzle class
+}

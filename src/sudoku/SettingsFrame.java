@@ -1,15 +1,5 @@
-/**
- * SettingsFrame.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that contains a GUI for the settings menu. Contains a back button that
- * goes back to the MainFrame GUI, and radio buttons for enabling/disabling program
- * settings and features.
- */
 package sudoku;
 
-
-/* Imports */
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import javax.swing.ButtonGroup;
@@ -17,15 +7,15 @@ import javax.swing.JFrame;
 
 public class SettingsFrame extends JFrame {
 
-    /* Declare private members */
+    // Khai báo các biến
     private final ButtonGroup timerGroup, legalMovesGroup, highlighterGroup,
             conflictGroup, hintsGroup, solutionsgroup;
 
 
-    /* Default constructors */
+    // Hàm xây dựng mặc định
     public SettingsFrame(int x, int y) {
 
-        /* Initialize components */
+        // Khởi tạo các thành phần
         initComponents();
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(
                 "icons/sudoku_icon.png")));
@@ -33,7 +23,7 @@ public class SettingsFrame extends JFrame {
         this.setLocation(x, y);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        /* Create the button groups, add the radio buttons */
+        // Tạo các nhóm button, thêm các nút radio
         this.timerGroup = new ButtonGroup();
         this.timerGroup.add(this.timerOn);
         this.timerGroup.add(this.timerOff);
@@ -54,67 +44,64 @@ public class SettingsFrame extends JFrame {
         this.solutionsgroup.add(this.solutionsOff);
         this.initializeSettings();
 
-        /* Asks user if they're sure when closing the window */
+        // Xác nhận khi đóng cửa sổ
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
-                if (WindowUtility.askYesNo("Are you sure you want to quit?",
-                        "Quitting")) {
-                    FileUtility.saveSettings(); /* Saves the setting and times before exiting */
+                if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
+                        "Đang thoát")) {
+                    FileUtility.saveSettings(); // lưu setting & times trước khi thoát
                     FileUtility.saveBestTimes();
                     System.exit(0);
                 }
             }
         });
 
-        /* Make the UI visible to user */
+        // Hiển thị UI cho người dùng
         this.setVisible(true);
     }
 
 
-    /**
-     * Initializes the radio buttons according to the specified settings in
-     * Settings.java. Enabled settings construct the radio buttons that are
-     * set to 'On', or 'Off' if disabled. Invoked in the constructor when the
-     * user loads the settings menu from the home menu.
-     */
+    // Khởi tạo các radio-button theo cài đặt trong settting.java
+    // Bật = On | Tắt = Off
+    // Được gọi trong contructor khi tải setting-menu từ home-menu
     private void initializeSettings() {
 
-        /* Loads the users settings into Settings.java */
+        // Load cácc setting vào Setting.java
         FileUtility.loadSettings();
 
-        /* Sets the timer on/off */
+        // Bật/tắt timer
         if (Settings.showTimer())
             this.timerOn.setSelected(true);
         else
             this.timerOff.setSelected(true);
 
-        /* Sets legal panel visibility on/off */
+        // Bật/tắt legal-moves
         if (Settings.showLegal())
             this.legalMovesOn.setSelected(true);
         else
             this.legalMovesOff.setSelected(true);
 
-        /* Sets highlighting feature on/off */
+        // Bật/tắt highlighting
         if (Settings.showHighlighted())
             this.highlighterOn.setSelected(true);
         else
             this.highlighterOff.setSelected(true);
 
-        /* Sets illegal highlighting feature on/off */
+        // Bật/tắt illegal highlighting
         if (Settings.showConflictingNumbers())
             this.conflictOn.setSelected(true);
         else
             this.conflictOff.setSelected(true);
 
-        /* Sets hints feature on/off */
+        // Bật/tắt gợi ý
         if (Settings.showHints())
             this.hintsOn.setSelected(true);
         else
             this.hintsOff.setSelected(true);
 
-        /* Sets solutions feature on/off */
+        // Bật/tắt solution
         if (Settings.showSolutions())
             this.solutionsOn.setSelected(true);
         else

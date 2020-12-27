@@ -1,10 +1,9 @@
 # Sudoku
-Welcome to team IDK's repository for the Sudoku desktop application. We hope you enjoy our product.
+Welcome to my repository for the Sudoku desktop application. I hope you enjoy this product.
 
 ## About
-The Sudoku desktop application was developed by a team of 4 computer science students for a software
-development course at the University of Oregon in Fall 2016. The application was developed based on
-the requirements of a small group of mock customers.
+The Sudoku desktop application was developed for a software development course at the University. 
+The application was developed based on the requirements of the lecture.
 
 ## Installation
 To install the application, click the releases tag near the top of this page. Then click 'Sudoku.zip'
@@ -15,26 +14,3 @@ to run it. Refer to the provided user manual for more detail and troubleshooting
 ## Requirements
 To be able to run the application, your computer must have Java 8 or a later version. Refer to the user
 manual for more information.
-
-## Developers
-
-#### Lucas Chavarria
-* Requirements Analyst
-* Developer
-* Documentation
-* Configuration Control
-
-#### Ron Guo
-* Project Manager
-* UI Design
-* Developer
-
-#### Cole Vikupitz
-* Developer
-* Documentation
-* Quality Control
-
-#### James Xu
-* Architecture
-* Developer
-* Tester & Integrator

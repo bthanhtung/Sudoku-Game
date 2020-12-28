@@ -1,14 +1,5 @@
-/**
- * SudokuFrame.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that contains a GUI for playing a game of Sudoku. Users can input numbers,
- * start a new game, reset the game, get hints and solutions, and quit out.
- */
 package sudoku;
 
-
-/* Imports */
 import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,7 +23,7 @@ import javax.swing.text.StyledDocument;
 
 public class SudokuFrame extends JFrame {
 
-    /* Initialize private members */
+    // Khởi tạo các biến
     private final JTextPane[][] fields;
     private final JTextPane[] legalBoxes;
     private boolean[][] editable;
@@ -45,10 +36,10 @@ public class SudokuFrame extends JFrame {
     private Timer timer;
     private TimerTask task;
 
-    /* Default constructor */
+    // Hàm xây dựng mặc định
     public SudokuFrame(SudokuPuzzle p, boolean loop, String path, int x, int y) {
 
-        /* Sets up the window components and design */
+        // Thiết lập các component và design
         this.puzzle = p;
         this.solution = new SudokuSolver(this.puzzle);
         this.difficulty = p.getDifficulty();
@@ -63,7 +54,7 @@ public class SudokuFrame extends JFrame {
                 "icons/sudoku_icon.png")));
         this.setLocation(x, y);
 
-        /* Sets the background color of the status fields */
+        // Thiết lập màu nền cho các trường trạng thái
         UIDefaults defaults = new UIDefaults();
         defaults.put("TextPane[Enabled].backgroundPainter", GUIColors.BACKGROUND);
         this.timeField.putClientProperty("Nimbus.Overrides", defaults);
@@ -79,7 +70,7 @@ public class SudokuFrame extends JFrame {
         this.completeField.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
         this.completeField.setBackground(GUIColors.BACKGROUND);
 
-        /* Sets the difficulty text in the frame */
+        // Thiết lặp độ khó (text) trong Frame
         switch (this.puzzle.getDifficulty()) {
             case 1:
                 this.difficultyField.setText("Novice");
@@ -97,7 +88,7 @@ public class SudokuFrame extends JFrame {
                 this.difficultyField.setText("Expert");
         }
 
-        /* Keep a 2-d list of the panels for easy accessing and checking */
+        // Giữ danh sách mảng 2-D để dễ dàng truy cập và kiểm tra
         this.fields = new JTextPane[][]{
         {this.A1, this.A2, this.A3, this.A4, this.A5, this.A6, this.A7, this.A8, this.A9},
         {this.B1, this.B2, this.B3, this.B4, this.B5, this.B6, this.B7, this.B8, this.B9},
@@ -109,16 +100,16 @@ public class SudokuFrame extends JFrame {
         {this.H1, this.H2, this.H3, this.H4, this.H5, this.H6, this.H7, this.H8, this.H9},
         {this.I1, this.I2, this.I3, this.I4, this.I5, this.I6, this.I7, this.I8, this.I9}};
 
-        /* Keep a list of the panels displaying the legal moves for easy accessing */
+        // Danh sách mảng hiện thị legal-moves để dễ dàng kiểm tra
         this.legalBoxes = new JTextPane[]{
             this.legalOne, this.legalTwo, this.legalThree,
             this.legalFour, this.legalFive, this.legalSix,
             this.legalSeven, this.legalEight, this.legalNine};
 
-        /* Set up the puzzle */
+        // Thiết lập puzzle
         this.initializeTable();
 
-        /* Adds the event listeners for each panel */
+        // Thêm event listeners cho mỗi panel
         for (int i = 0; i < 9; i++) {
             this.legalBoxes[i].setEditable(false);
             for (int j = 0; j < 9; j++) {
@@ -126,7 +117,7 @@ public class SudokuFrame extends JFrame {
                 int m = i;
                 int n = j;
 
-                /* Adds the mouse listeners for each panel */
+                // Thêm mouse listeners cho mỗi panel
                 pane.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -137,7 +128,7 @@ public class SudokuFrame extends JFrame {
                     }
                 });
 
-                /* Adds the focus listeners for each panel */
+                // Thêm focus listeners cho mỗi panel
                 pane.addFocusListener(new FocusListener() {
                     @Override
                     public void focusGained(FocusEvent e) {
@@ -159,11 +150,11 @@ public class SudokuFrame extends JFrame {
                     }
                 });
 
-                /* Adds the key listeners for each panel */
+                // Thêm key listeners cho mỗi panel
                 pane.addKeyListener(new KeyListener() {
                     @Override
                     public void keyTyped(KeyEvent e) {
-                        if (!editable[m][n])  /* If square is uneditable, do nothing */
+                        if (!editable[m][n])  // Nếu không thể chỉnh sửa, không làm gì cả.
                             return;
 
                         if (!(e.getKeyChar() == '1' || e.getKeyChar() == '2' ||
@@ -171,7 +162,7 @@ public class SudokuFrame extends JFrame {
                                 e.getKeyChar() == '5' || e.getKeyChar() == '6' ||
                                 e.getKeyChar() == '7' || e.getKeyChar() == '8' ||
                                 e.getKeyChar() == '9')) {
-                            pane.setText("");  /* If not a valid number, delete the value in square */
+                            pane.setText("");  // Nếu không phải số hợp lệ --> xóa giá trị trong ô
                             String str = puzzle.getConflictingSquares(m, n);
                             puzzle.remove(m, n);
                             correct(str);
@@ -201,13 +192,13 @@ public class SudokuFrame extends JFrame {
             }
         }
 
-        /* Asks user if they're sure when closing the window. */
+        // Xác nhận trước khi close window
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
-                if (WindowUtility.askYesNo("Are you sure you want to quit?",
-                        "Quitting")) {
+                if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
+                        "Warning!")) {
                     BestTimes.time = seconds;
                     FileUtility.saveGame(puzzle, puzzle.getDifficulty(), path);
                     FileUtility.saveBestTimes();
@@ -216,13 +207,13 @@ public class SudokuFrame extends JFrame {
             }
         });
 
-        /* Set components visible/invisible according to user settings */
+        // Set các thành phần visible/invisible theo setting
         if (!Settings.showLegal())
             jPanel2.setVisible(false);
         if (!Settings.showTimer())
             timeField.setVisible(false);
 
-        /* Sets the timer up, display the UI to user */
+        // Set timer, hiển thị UI
         this.timeField.setText(this.timeToString());
         this.timer = new Timer();
         this.task = new TimerTask() {
@@ -234,33 +225,36 @@ public class SudokuFrame extends JFrame {
         };
         this.timer.scheduleAtFixedRate(this.task, 1000, 1000);
 
-        /* Makes the UI visible to the user */
+        // Hiện thị UI
         this.setVisible(true);
     }
 
 
-    /**
-     * Paints the lines in the sudoku puzzle window.
-     */
+    // Vẽ các lines trong cửa sổ sudoku puzzle
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(3));
         super.paint(g);
-        g2d.drawRect(38, 135, 433, 435);
-        g2d.draw(new Line2D.Float(183, 136, 183, 568));
-        g2d.draw(new Line2D.Float(327, 136, 327, 568));
-        g2d.draw(new Line2D.Float(38, 281, 468, 281));
-        g2d.draw(new Line2D.Float(38, 425, 468, 425));
+//        g2d.drawRect(38, 135, 433, 435);
+//        g2d.draw(new Line2D.Float(183, 136, 183, 568));
+//        g2d.draw(new Line2D.Float(327, 136, 327, 568));
+//        g2d.draw(new Line2D.Float(38, 281, 468, 281));
+//        g2d.draw(new Line2D.Float(38, 425, 468, 425));
+//        g2d.drawRect(45, 140, 440, 444); // vuông
+        g2d.drawRect(35, 95, 435, 433); // vuông | trái-trên-phải-dưới
+        g2d.draw(new Line2D.Float(180, 95, 180, 528)); // dọc 1
+        g2d.draw(new Line2D.Float(324, 95, 324, 528)); // dọc 2
+        g2d.draw(new Line2D.Float(35, 238, 470, 238)); // ngang 1
+        g2d.draw(new Line2D.Float(35, 383, 470, 383)); // ngang 2
+
     }
 
 
-    /**
-     * Takes the puzzle given and sets up the board in the window for the user.
-     */
+    // Đưa ra puzzle và thiết lập board trong cửa sổ cho người dùng
     private void initializeTable() {
 
-        /* Initialize variables, sets up the puzzle */
+        // Khởi tạo các biến và thiết lập puzzle
         this.highlighted = 0;
         this.editable = new boolean[9][9];
         int k = 0;
@@ -268,7 +262,7 @@ public class SudokuFrame extends JFrame {
         String t = this.puzzle.currentPuzzleState();
         for (int i = 0; i < 9; i++) {
 
-            /* Sets the text alignment in each grid to centered */
+            // Căn giữa mỗi text alignment trong mỗi grid
             StyledDocument l_doc = this.legalBoxes[i].getStyledDocument();
             SimpleAttributeSet l_center = new SimpleAttributeSet();
             StyleConstants.setAlignment(l_center, StyleConstants.ALIGN_CENTER);
@@ -276,14 +270,15 @@ public class SudokuFrame extends JFrame {
 
             for (int j = 0; j < 9; j++) {
 
-                /* Sets the text alignment in each grid to centered */
+                // Căn giữa mỗi text alignment trong mỗi grid
                 StyledDocument f_doc = this.fields[i][j].getStyledDocument();
                 SimpleAttributeSet f_center = new SimpleAttributeSet();
                 StyleConstants.setAlignment(f_center, StyleConstants.ALIGN_CENTER);
                 f_doc.setParagraphAttributes(0, f_doc.getLength(), f_center, false);
                 this.fields[i][j].setEditable(false);
 
-                /* Makes the space uneditable if the number is predetermined, or editable if otherwise */
+                // Các khoảng trống không thể chỉnh sửa nếu số được xác định trước hoặc có thể nếu khác
+                /* Makes the space not editable if the number is predetermined, or editable if otherwise */
                 if (s.charAt(k) != '0') {
                     this.editable[i][j] = false;
                     this.fields[i][j].setForeground(GUIColors.BLACK);
@@ -292,14 +287,14 @@ public class SudokuFrame extends JFrame {
                     this.editable[i][j] = true;
                     this.fields[i][j].setForeground(GUIColors.BLUE);
 
-                    /* Displays the numbers inside the corresponding tiles */
+                    // Hiển thị các số bên trong các ô tương ứng
                     if (t.charAt(k) != '0')
                         this.fields[i][j].setText(Character.toString(t.charAt(k)));
                     else
                         this.fields[i][j].setText("");
                 } k++;
 
-                /* Illegally inserted numbers are highlighted red */
+                // Các số chèn không hợp lệ sẽ được đánh dấu màu đỏ
                 if (Settings.showConflictingNumbers()) {
                     boolean[] temp = this.puzzle.getLegalMoves(i, j);
                     int val = this.puzzle.getValue(i, j);
@@ -311,16 +306,13 @@ public class SudokuFrame extends JFrame {
             }
         }
 
-        /* Updates the status, repaints the grid */
+        // Cập nhật lại trạng thái, repaints lại grid
         this.updateStatus(true);
         this.repaint();
     }
 
 
-    /**
-     * Returns a string representation of the current time, used for displaying
-     * in the time field text box.
-     */
+    // Trả về thời gian - được sử dụng để hiển thị trong trường time-text-box
     private String timeToString() {
 
         /* Get timer variables */
@@ -328,7 +320,7 @@ public class SudokuFrame extends JFrame {
         int min = (this.seconds / 60);
         int hrs = ((this.seconds / 60) / 60);
 
-        /* Returns time in format hh:mm:ss */
+        // Định dạng hh:mm:ss
         if (hrs == 0)
             return String.format("%02d:%02d", min, sec);
         else
@@ -336,21 +328,19 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Sets the GUI's puzzle board to the specified int[][]. Used when the user
-     * requests the solution.
-     */
+    // Set giao diện puzzle board thành int[][].
+    // Được sử dụng khi người đùng yêu cầu solution
     private void importBoard(int[][] board) {
 
-        /* Loops through the array, on each tile */
+        // Lặp qua mảng, trên mỗi ô
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
 
-                /* Skip uneditable tiles */
+                // Bỏ qua các ô không thể chỉnh sửa
                 if (!this.editable[i][j])
                     continue;
 
-                /* Inputs the correct numbers into the tiles */
+                // Nhập các số hợp lệ vào ô
                 if (board[i][j] == this.highlighted)
                     this.fields[i][j].setForeground(GUIColors.GREEN);
                 else
@@ -361,17 +351,14 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Updates and displays all legal moves allowed inside the currently
-     * focused box.
-     */
+    // Cập nhật và hiển thị tất cả các legal moves
     private void updateLegalMoves(int i, int j) {
 
-        /* Get the legal moves for the tile */
+        // Get các legal moves cho ô
         boolean[] legalMoves = this.puzzle.getLegalMoves(i, j);
         for (int k = 0; k < 9; k++) {
 
-            /* Only update if the focused tile is editable */
+            // Chỉ cập nhật nếu ô được chọn có thể chỉnh sửa được
             if (this.editable[i][j]) {
                 if (legalMoves[k])
                     this.legalBoxes[k].setText(Integer.toString(k + 1));
@@ -384,96 +371,96 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Updates the percentage of tiles filled, and checks if the puzzle is
-     * filled of not. Starts a new game if completed, or resumes game if not.
-     */
+    // Cập nhật % các ô được fill và kiểm tra xem puzzle có fill chưa
+    // New game nếu completed hoặc tiếp tục nếu !completed
     private void updateStatus(boolean flag) {
 
-        /* Update the number and percent of tiles filled in the status text box */
+        // Cập nhật số lượng và % các ô được fill
         int i = this.puzzle.getNumberFilled();
         int j = (int)(((float)i / 81) * 100);
-        this.statusField.setText(String.format("Tiles Filled: %d/81 (%d%%)", i, j));
+        this.statusField.setText(String.format("Các ô đã nhập: %d/81 (%d%%)", i, j));
 
-        /* Checks for puzzle completeness if all tiles are filled in */
+        // Kiểm tra độ hoàn chỉnh của puzzle nếu tất cả các ô được fill
         if (i == 81 && this.puzzle.isComplete()) {
 
-            /* Display complete, stop the timer */
+            // Hiển thị complete và dừng timer
             this.timer.cancel();
             this.completeField.setForeground(GUIColors.DARK_GREEN);
             this.completeField.setText("Complete!");
 
-            /* Display message and time, only add to best times if solution not requested or not a custome puzzle */
+            // Hiển thị message and time
+            // Chỉ thêm vào best-time nếu người chơi không dùng tới tính năng solution hoặc là custom puzzle
             String s = "";
             if (flag && this.loop)
                 if (BestTimes.insertBestTime(this.seconds, this.difficulty))
-                    s += "\nNew Best Time!";
-            WindowUtility.displayInfo("You solved the puzzle!\nTime: " +
-                    this.timeToString() + s, "Congratulations!");
-
-            /* Starts a new game if not a custom puzzle, or returns to the puzzles menu if is */
-            if (!this.loop) {
+                    s += "\nKỷ lục mới!";
+            WindowUtility.displayInfo("Bạn đã giải được Puzzle rồi hihi!\nTime: " +
+                    this.timeToString() + s, "Congratulations.!");
+            
+            if(WindowUtility.askYesNo("Bạn có muốn tiếp tục không...?", "Warning!")){
+                if (!this.loop) {
                 this.puzzle.resetPuzzle();
                 FileUtility.saveGame(this.puzzle, this.puzzle.getDifficulty(), this.path);
 //                PuzzlesFrame f = new PuzzlesFrame(this.getX(), this.getY());
                 this.dispose();
             }
+                
+                
+            } else {
+            MainFrame f = new MainFrame(this.getX(), this.getY());
+                this.dispose();
+            }
 
-            /* Resets the timer, starts a new game */
+            // Resets timer, --> new game
             this.seconds = 0;
             this.newGame();
 
         } else {
 
-            /* Puzzle is still incomplete */
+            // Puzzle vẫn chưa hoàn thành
             this.completeField.setForeground(GUIColors.RED);
             this.completeField.setText("Incomplete");
         }
     }
 
 
-    /**
-     * Highlights all the numbers common with the number selected in the board
-     * as green.
-     */
+    // Đánh dấu tất cả các số chung với số được chọn trong bảng là màu xanh lá cây.
     private void highlight(JTextPane t) {
 
-        /* Try to extract the value inside the focused tile */
+        // Trích xuất giá trị bên trong ô đang chọn
         try {
 
-            /* Gets the number in the tile */
+            // Get số trong ô
             int k = Integer.parseInt(t.getText());
             if (t.getForeground() == GUIColors.GREEN || this.highlighted == k) {
-                this.resetColors();     /* Resets all tile colors back */
+                this.resetColors();     // Reset lại màu của tất cả các ô
                 this.highlighted = 0;
                 return;
             }
 
-            /* Sets the highlighted variable to new selected value */
+            // Set biến highlighted thành giá trị được chọn (mới)
             this.highlighted = k;
             this.resetColors();
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
                     try {
 
-                        /* Sets foreground of each tile with the highlighted value to green */
+                        // Set màu nền cho mỗi ô có giá trị được đánh dấu thành màu xanh lục
                         if (Integer.parseInt(this.fields[i][j].getText()) == this.highlighted) {
                             if (this.fields[i][j].getForeground() != GUIColors.RED)
                                 this.fields[i][j].setForeground(GUIColors.GREEN);
                         }
 
-                        /* Skips blank tiles */
+                        // Bỏ qua ô trống
                     } catch (Exception e) {/* Ignore exceptions */}
                 }
             }
-            /* Skips blank tiles */
+            // Bỏ qua ô trống
         } catch (Exception e) {/* Ignore exceptions */}
     }
 
 
-    /**
-     * Marks all conflicting tiles given by the string in red.
-     */
+    // Đánh dấu tất cả các ô xung đột được cung cấp bởi chuỗi bằng màu đỏ.
     private void mark(String str) {
         for (int i = 0; i < str.length(); i += 6) {
             String coor = str.substring(i, i + 6);
@@ -484,10 +471,7 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Recolors all the grids back to black if they do not contain any conflicting
-     * tiles.
-     */
+    // Đổi màu tất cả các grid trở lại màu black nếu chúng không chứa bất kỳ ô xung đột nào
     private void correct(String str) {
         for (int i = 0; i < str.length(); i += 6) {
             String coor = str.substring(i, i + 6);
@@ -505,23 +489,21 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Resets the color of all numbers back to its original form. Uneditable
-     * numbers are reset to black, and others set to blue.
-     */
+    // Reset lại màu của tất cả các số trở lại trạng thái ban đầu
+    // Các số không thể chỉnh sửa được đặt lại thành màu Black và các số khác được đặt thành màu xanh lam (Blue)
     private void resetColors() {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
 
-                /* Skips red-colored tiles */
+                // Bỏ qua các ô red-colored
                 if (this.fields[i][j].getForeground() == GUIColors.RED)
                     continue;
 
-                /* Uneditable tiles are black */
+                // Các ô không thể chỉnh sửa có màu Black
                 if (!this.editable[i][j])
                     this.fields[i][j].setForeground(GUIColors.BLACK);
 
-                /* Editable tiles are blue */
+                // Các ô có thể chính sửa có màu blue
                 else
                     this.fields[i][j].setForeground(GUIColors.BLUE);
             }
@@ -529,30 +511,28 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Starts a brand new puzzle. Invoked when the user completes a non-custom
-     * puzzle, or requests a new game from the menu.
-     */
+    // Bắt đầu một puzzle mới.
+    // Được gọi khi người chơi hoàn thành puzzle hoặc yêu cầu New-game
     private void newGame() {
 
-        /* Non-applicable if this is a custom puzzle */
-        if (!this.loop)
-            return;
+        // Không áp dụng nếu đây là custom-puzzle
+//        if (!this.loop)
+//            return;
 
-        /* Get the new puzzle */
+        // Get puzzle mới
         SudokuGenerator gen = new SudokuGenerator(this.difficulty);
         this.puzzle = gen.getPuzzle();
         this.solution = new SudokuSolver(this.puzzle);
 
-        /* Ask if the user is sure if the current puzzle is not complete */
+        // Xác nhận xem người chơi có chắc là puzzle hiện tại chưa complete
         if (this.completeField.getForeground() != GUIColors.DARK_GREEN) {
-            if (WindowUtility.askYesNo("You will lose your current progress on this puzzle.\n"
-                    + "Are you sure you want to start a new game?", "Warning!")) {
+            if (WindowUtility.askYesNo("Bạn sẽ thua game hiện tại.\n"
+                    + "Có chắc bạn muốn New-game chứ?", "Warning!")) {
                 this.initializeTable();
                 this.resetTimer();
             }
 
-        /* Restart the game immediately if complete */
+        // Restart game ngay nếu complete
         } else {
             this.initializeTable();
             this.resetTimer();
@@ -560,10 +540,8 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Resets the game back to its initial state. Called when the user requests
-     * to reset the game.
-     */
+    // Reste game về trạng thái ban đầu
+    // Được gọi khi người chơi yêu cầu reset-game
     private void resetGame() {
         this.puzzle.resetPuzzle();
         this.resetTimer();
@@ -571,51 +549,44 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Quits out of the current puzzle. Invoked when the user clicks quit from
-     * the drop-down menu. If the current puzzle is a custom puzzle, the user is
-     * taken back to the puzzles menu, otherwise the user is taken back to the
-     * main menu.
-     */
+    // Thoát khỏi puzzle hiện tại
+    // Quay về menu chính
     private void quit() {
 
-        /* Asks the user if they're sure */
-        if (WindowUtility.askYesNo("Are you sure you want to quit?", "Warning!")) {
+        // Xác nhận trước khi thoát
+        if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?", "Warning!")) {
 
-            /* Saves the puzzle into the save file */
+            // Lưu puzzle vào file
             BestTimes.time = this.seconds;
             FileUtility.saveGame(this.puzzle, this.puzzle.getDifficulty(), this.path);
 
-            /* Destroys the timer */
+            // Hủy timer
             this.timer.cancel();
             this.timer.purge();
-//            if (this.loop) {    /* Goes back to the main menu */
-//                MainFrame f = new MainFrame(this.getX(), this.getY());
-//            } else {    /* Goes back to the puzzles menu */
+            if (this.loop) {    // Về memnu chính
+                MainFrame f = new MainFrame(this.getX(), this.getY());
+//            } else {    // Về puzzle menu
 //                PuzzlesFrame f = new PuzzlesFrame(this.getX(), this.getY());
-//            }
+            }
             this.dispose();
         }
     }
 
 
-    /**
-     * Adds a hint into the puzzle. Invoked when the user clicks the get hint option
-     * from the drop-down menu.
-     */
+    // Thêm gợi ý (Hint) vào puzzle
     private void getHint() {
 
-        /* Hints are disabled */
+        // Các Hint bị tắt
         if (!Settings.showHints())
             return;
 
-        /* Get the hint from the solution */
+        // Get Hint từ Solution
         SudokuPuzzle p = this.solution.getSolution();
         int[][] a = p.toArray();
         for (int i = 0; i < 9; i++)
             for (int j = 0; j < 9; j++)
 
-                /* Checks to see if the value is correct, inserts numebr into tile if not */
+                // Kiểm tra các giá trị - nếu đúng thì chèn vào
                 if (this.puzzle.getValue(i, j) != a[i][j]) {
                     String str = this.puzzle.getConflictingSquares(i, j);
                     this.puzzle.insert(a[i][j], i, j);
@@ -623,13 +594,13 @@ public class SudokuFrame extends JFrame {
                     this.fields[i][j].setText(Integer.toString(a[i][j]));
                     this.editable[i][j] = false;
 
-                    /* Highlights the value green if needed */
+                    // Highlight các giá trị màu green nếu cần
                     if (this.highlighted == a[i][j])
                         this.fields[i][j].setForeground(GUIColors.GREEN);
                     else
                         this.fields[i][j].setForeground(GUIColors.BLACK);
 
-                    /* Adds time to the timer, repaints the grid, updates the puzzle */
+                    // Thêm thời gian vào timer, repaint lại grid, cập nhật puzzle
                     this.repaint();
                     this.seconds += (15 + this.puzzle.getDifficulty());
                     this.updateStatus(true);
@@ -638,22 +609,19 @@ public class SudokuFrame extends JFrame {
 }
 
 
-    /**
-     * Gets the solution from the sudoku solver and imports the solution into the
-     * puzzle.
-     */
+    // Get solution từ sudoku-solver và import solution vào puzzle
     private void getSolution() {
 
-        /* Solutons are disabled */
+        // Các solution đang bị tắt
         if (!Settings.showSolutions())
             return;
 
-        /* Asks the user if they're sure */
-        if (!WindowUtility.askYesNo("Choosing to display the solution will result in your time not being counted."
-                + "\nAre you sure you want to display the solution?", "Warning!"))
+        // Xác nhận trước khi thoát
+        if (!WindowUtility.askYesNo("Bạn sẽ không được tính điểm nếu chọn Solution"
+                + "\nBạn có chắc là muốn hiện thị Solution chứ?", "Warning!"))
             return;
 
-        /* Imports the solution */
+        // Import solution
         int x = this.puzzle.getDifficulty();
         this.importBoard(this.solution.getSolution().toArray());
         this.puzzle = this.solution.getSolution();
@@ -668,23 +636,21 @@ public class SudokuFrame extends JFrame {
     }
 
 
-    /**
-     * Resets the timer back to 0, invoked when the user restarts or starts a
-     * new game. Cancels and purges the timer and timer task, and creates a new
-     * one.
-     */
+    // Reset timer về 0
+    // Được gọi khi người chơi restart hoặc start new-game.
+    // Hủy và xóa timer --> tạo mới
     private void resetTimer() {
 
-        /* Set seconds back to 0 */
+        // Set seconds về 0.
         this.seconds = 0;
         this.timeField.setText(this.timeToString());
 
-        /* Destroys the old timer */
+        // Hủy timer cũ
         this.task.cancel();
         this.timer.cancel();
         this.timer.purge();
 
-        /* Creates and starts the new timer */
+        // Tạo và khởi động một timer mới
         this.timer = new Timer();
         this.task = new TimerTask() {
             @Override
@@ -902,16 +868,12 @@ public class SudokuFrame extends JFrame {
         TimeLabel1 = new javax.swing.JLabel();
         jScrollPane93 = new javax.swing.JScrollPane();
         difficultyField = new javax.swing.JTextPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        OptionsMenu = new javax.swing.JMenu();
-        NewGameOption = new javax.swing.JMenuItem();
-        ResetGameOption = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        QuitOption = new javax.swing.JMenuItem();
-        HelpMenu = new javax.swing.JMenu();
-        GetHintOption = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        SolveOption = new javax.swing.JMenuItem();
+        NewGameButton = new javax.swing.JButton();
+        ResetButton = new javax.swing.JButton();
+        QuitButton = new javax.swing.JButton();
+        GetHintButton = new javax.swing.JButton();
+        SolverButton = new javax.swing.JButton();
+        TimeLabel2 = new javax.swing.JLabel();
 
         jMenu2.setText("File");
         jMenuBar2.add(jMenu2);
@@ -924,7 +886,10 @@ public class SudokuFrame extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sudoku");
+        setBackground(new java.awt.Color(153, 255, 153));
+        setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(180, 180, 180));
 
@@ -1721,6 +1686,8 @@ public class SudokuFrame extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 58, -1, -1));
+
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
 
         legalTwo.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
@@ -1786,17 +1753,17 @@ public class SudokuFrame extends JFrame {
         legalEight.setHighlighter(null);
         jScrollPane85.setViewportView(legalEight);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Legal Moves");
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        jLabel1.setText("Legal Moves:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane46, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                             .addComponent(jScrollPane83, javax.swing.GroupLayout.Alignment.LEADING)
@@ -1817,6 +1784,8 @@ public class SudokuFrame extends JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane90, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1824,31 +1793,33 @@ public class SudokuFrame extends JFrame {
                         .addComponent(jScrollPane89, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane88, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane86, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane87, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane85, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane46, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane83, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane84, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jScrollPane86, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane87, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane85, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jScrollPane46, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane83, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane84, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 170, -1, -1));
 
         statusField.setEditable(false);
         statusField.setBackground(new java.awt.Color(204, 204, 255));
         statusField.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        statusField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         statusField.setFocusable(false);
         statusField.setHighlighter(null);
         jScrollPane91.setViewportView(statusField);
+
+        getContentPane().add(jScrollPane91, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 22, 220, -1));
 
         completeField.setEditable(false);
         completeField.setBackground(new java.awt.Color(204, 204, 255));
@@ -1857,14 +1828,19 @@ public class SudokuFrame extends JFrame {
         completeField.setHighlighter(null);
         jScrollPane92.setViewportView(completeField);
 
+        getContentPane().add(jScrollPane92, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 22, 110, -1));
+
         timeField.setEditable(false);
         timeField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         timeField.setFocusable(false);
         timeField.setHighlighter(null);
         jScrollPane94.setViewportView(timeField);
 
-        TimeLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        TimeLabel1.setText("Time:");
+        getContentPane().add(jScrollPane94, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 80, -1));
+
+        TimeLabel1.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        TimeLabel1.setText("Level:");
+        getContentPane().add(TimeLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, -1, 25));
 
         difficultyField.setEditable(false);
         difficultyField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1872,135 +1848,97 @@ public class SudokuFrame extends JFrame {
         difficultyField.setHighlighter(null);
         jScrollPane93.setViewportView(difficultyField);
 
-        OptionsMenu.setText("Options");
+        getContentPane().add(jScrollPane93, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 130, 83, -1));
 
-        NewGameOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/new_puzzle_icon.png"))); // NOI18N
-        NewGameOption.setText("   New Game");
-        NewGameOption.addActionListener(new java.awt.event.ActionListener() {
+        NewGameButton.setBackground(new java.awt.Color(153, 255, 153));
+        NewGameButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        NewGameButton.setText("New Game");
+        NewGameButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewGameOptionActionPerformed(evt);
+                NewGameButtonActionPerformed(evt);
             }
         });
-        OptionsMenu.add(NewGameOption);
+        getContentPane().add(NewGameButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 115, 43));
 
-        ResetGameOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/restart_icon.png"))); // NOI18N
-        ResetGameOption.setText("   Reset Game");
-        ResetGameOption.addActionListener(new java.awt.event.ActionListener() {
+        ResetButton.setBackground(new java.awt.Color(255, 255, 153));
+        ResetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        ResetButton.setText("Reset Game");
+        ResetButton.setPreferredSize(new java.awt.Dimension(107, 25));
+        ResetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ResetGameOptionActionPerformed(evt);
+                ResetButtonActionPerformed(evt);
             }
         });
-        OptionsMenu.add(ResetGameOption);
-        OptionsMenu.add(jSeparator1);
+        getContentPane().add(ResetButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 510, 120, 43));
 
-        QuitOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/close_icon.png"))); // NOI18N
-        QuitOption.setText("   Quit");
-        QuitOption.addActionListener(new java.awt.event.ActionListener() {
+        QuitButton.setBackground(new java.awt.Color(153, 153, 255));
+        QuitButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        QuitButton.setText("Quit Game");
+        QuitButton.setMaximumSize(new java.awt.Dimension(95, 25));
+        QuitButton.setMinimumSize(new java.awt.Dimension(95, 25));
+        QuitButton.setPreferredSize(new java.awt.Dimension(95, 25));
+        QuitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                QuitOptionActionPerformed(evt);
+                QuitButtonActionPerformed(evt);
             }
         });
-        OptionsMenu.add(QuitOption);
+        getContentPane().add(QuitButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 510, 115, 43));
 
-        jMenuBar1.add(OptionsMenu);
-
-        HelpMenu.setText("Help");
-
-        GetHintOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/hint_icon.png"))); // NOI18N
-        GetHintOption.setText("   Get Hint");
-        GetHintOption.addActionListener(new java.awt.event.ActionListener() {
+        GetHintButton.setBackground(new java.awt.Color(255, 204, 102));
+        GetHintButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        GetHintButton.setText("Get Hint");
+        GetHintButton.setPreferredSize(new java.awt.Dimension(107, 25));
+        GetHintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GetHintOptionActionPerformed(evt);
+                GetHintButtonActionPerformed(evt);
             }
         });
-        HelpMenu.add(GetHintOption);
-        HelpMenu.add(jSeparator2);
+        getContentPane().add(GetHintButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(487, 362, 115, 43));
 
-        SolveOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/solution_icon.png"))); // NOI18N
-        SolveOption.setText("   Solve Puzzle");
-        SolveOption.addActionListener(new java.awt.event.ActionListener() {
+        SolverButton.setBackground(new java.awt.Color(255, 155, 153));
+        SolverButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        SolverButton.setText("Get Solver");
+        SolverButton.setPreferredSize(new java.awt.Dimension(107, 25));
+        SolverButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SolveOptionActionPerformed(evt);
+                SolverButtonActionPerformed(evt);
             }
         });
-        HelpMenu.add(SolveOption);
+        getContentPane().add(SolverButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(487, 431, 115, 43));
 
-        jMenuBar1.add(HelpMenu);
-
-        setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane91, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane92, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane93, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(153, 153, 153)
-                        .addComponent(TimeLabel1)
-                        .addGap(36, 36, 36)
-                        .addComponent(jScrollPane94, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 46, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TimeLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane94, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane92, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane91, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(55, 55, 55))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(147, 147, 147)
-                .addComponent(jScrollPane93, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        TimeLabel2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        TimeLabel2.setText("Time:");
+        getContentPane().add(TimeLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 30, -1, 25));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // <editor-fold defaultstate="collapsed" desc="Menu Action Event Handlers">
-    /* Starts a new game */
-    private void NewGameOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewGameOptionActionPerformed
+    private void NewGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewGameButtonActionPerformed
+        // TODO add your handling code here:
         this.newGame();
-    }//GEN-LAST:event_NewGameOptionActionPerformed
-    /* Resets the game back to its initial state */
-    private void ResetGameOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetGameOptionActionPerformed
-        if (WindowUtility.askYesNo("Are you sure you want to reset the game?", "Warning!"))
+    }//GEN-LAST:event_NewGameButtonActionPerformed
+
+    private void ResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetButtonActionPerformed
+        // TODO add your handling code here:
+        if (WindowUtility.askYesNo("Bạn có muốn reset lại game này?", "Warning!"))
             this.resetGame();
-    }//GEN-LAST:event_ResetGameOptionActionPerformed
-    /* Quits out of the game */
-    private void QuitOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitOptionActionPerformed
+    }//GEN-LAST:event_ResetButtonActionPerformed
+
+    private void QuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitButtonActionPerformed
+        // TODO add your handling code here:
         this.quit();
-    }//GEN-LAST:event_QuitOptionActionPerformed
-    /* Invoked when the solution is requested */
-    private void SolveOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolveOptionActionPerformed
-        this.getSolution();
-    }//GEN-LAST:event_SolveOptionActionPerformed
-    /* Invoked when a hint is requested */
-    private void GetHintOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GetHintOptionActionPerformed
+    }//GEN-LAST:event_QuitButtonActionPerformed
+
+    private void GetHintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GetHintButtonActionPerformed
+        // TODO add your handling code here:
         this.getHint();
-    }//GEN-LAST:event_GetHintOptionActionPerformed
+    }//GEN-LAST:event_GetHintButtonActionPerformed
+
+    private void SolverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolverButtonActionPerformed
+        // TODO add your handling code here:
+        this.getSolution();
+//        puzzle.print();
+    }//GEN-LAST:event_SolverButtonActionPerformed
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Component Declarations">
@@ -2068,7 +2006,7 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JTextPane G7;
     private javax.swing.JTextPane G8;
     private javax.swing.JTextPane G9;
-    private javax.swing.JMenuItem GetHintOption;
+    private javax.swing.JButton GetHintButton;
     private javax.swing.JTextPane H1;
     private javax.swing.JTextPane H2;
     private javax.swing.JTextPane H3;
@@ -2078,7 +2016,6 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JTextPane H7;
     private javax.swing.JTextPane H8;
     private javax.swing.JTextPane H9;
-    private javax.swing.JMenu HelpMenu;
     private javax.swing.JTextPane I1;
     private javax.swing.JTextPane I2;
     private javax.swing.JTextPane I3;
@@ -2088,19 +2025,18 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JTextPane I7;
     private javax.swing.JTextPane I8;
     private javax.swing.JTextPane I9;
-    private javax.swing.JMenuItem NewGameOption;
-    private javax.swing.JMenu OptionsMenu;
-    private javax.swing.JMenuItem QuitOption;
-    private javax.swing.JMenuItem ResetGameOption;
-    private javax.swing.JMenuItem SolveOption;
+    private javax.swing.JButton NewGameButton;
+    private javax.swing.JButton QuitButton;
+    private javax.swing.JButton ResetButton;
+    private javax.swing.JButton SolverButton;
     private javax.swing.JLabel TimeLabel1;
+    private javax.swing.JLabel TimeLabel2;
     private javax.swing.JTextPane completeField;
     private javax.swing.JTextPane difficultyField;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2198,8 +2134,6 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JScrollPane jScrollPane92;
     private javax.swing.JScrollPane jScrollPane93;
     private javax.swing.JScrollPane jScrollPane94;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTextPane legalEight;
     private javax.swing.JTextPane legalFive;
     private javax.swing.JTextPane legalFour;
@@ -2214,4 +2148,4 @@ public class SudokuFrame extends JFrame {
     // End of variables declaration//GEN-END:variables
 //</editor-fold>
 
-} // End SudokuFrame class
+}

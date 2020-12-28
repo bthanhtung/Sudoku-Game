@@ -1,26 +1,14 @@
-/**
- * SudokuSolver.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that takes a Sudoku puzzle, copies and solves it. Contains a method for
- * getting the solution and another for checking its solvavility.
- *
- * Resources that helped:
- * http://www.programcreek.com/2014/05/leetcode-sudoku-solver-java/
- * http://www.heimetli.ch/ffh/simplifiedsudoku.html
- */
 package sudoku;
-
 
 public class SudokuSolver {
 
-    /* Declare private members */
+    // Khai báo biến
     private final SudokuPuzzle puzzle;
     private final int[][] board;
     private boolean solvable;
 
 
-    /* Default constructor */
+    // Hàm xây dựng mặc định
     public SudokuSolver(SudokuPuzzle p) {
         this.puzzle = new SudokuPuzzle(p.initialPuzzleState());
         this.board = this.puzzle.toArray();
@@ -30,23 +18,15 @@ public class SudokuSolver {
     }
 
 
-    /**
-     * Returns true if the Sudoku puzzle was able to be solved, or false if not.
-     *
-     * @return True if the puzzle can be solved, false if not.
-     */
+    // Nếu puzzle có thể solve --> true
+    // Nếu không --> false
     public boolean isSolvable() {
         return this.solvable;
     }
 
 
-    /**
-     * Returns the solved Sudoku puzzle, or null if th puzzle couldn't be solved.
-     * The puzzle returned is a copy of the Sudoku puzzle passed into the constructor,
-     * but in a solved state.
-     *
-     * @return A copy of the Sudoku puzzle in a solved state, or null if not solvable.
-     */
+    // Trả về Sudoku đã sovle hoặc null nếu không giải được
+    // Puzzle trả về là bản sao (copy) của puzzle được chuyển (passed) vào contructor nhưng ở trạng thái đã giải.
     public SudokuPuzzle getSolution() {
         if (!this.solvable)
             return null;
@@ -55,19 +35,17 @@ public class SudokuSolver {
     }
 
 
-    /**
-     * Method that solves the puzzle, using the 2-d integer array representing the
-     * board.
-     */
+    // Phương thức solve puzzle
+    // Dùng mảng 2-D
     private boolean solve() {
 
-        /* Loops through the board, skipping non-empty tiles */
+        // Lặp qua board và bỏ qua các ô !trống
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (this.board[i][j] != 0)
                     continue;
 
-                /* Try each number in the tile; if illegal, backtrack for correction(s) */
+                // (Cố) thử từng ô, nếu không hợp lệ --> quay lại thử các ô khác
                 for (int k = 1; k <= 9; k++) {
                     this.board[i][j] = k;
                     if (this.puzzle.insert(k, i, j) && solve())
@@ -81,4 +59,4 @@ public class SudokuSolver {
         return this.puzzle.isComplete();
     }
 
-} // End SudokuSolver class
+}

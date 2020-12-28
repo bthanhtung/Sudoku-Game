@@ -1,25 +1,11 @@
-/**
- * WindowUtility.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Contains static methods useful for displaying messages and prompting users
- * for information through a JOptionFrame. Useful for applications with UI's.
- */
 package sudoku;
 
-
-/* Imports */
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 public class WindowUtility {
 
-    /**
-     * Displays an information window with a message to the user.
-     *
-     * @param msg The message to display.
-     * @param title The title of the informational window.
-     */
+    // Hiển thị cửa sổ + thông báo cho người chơi
     public static void displayInfo(String msg, String title) {
         Runnable runnable =
             (Runnable) Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.asterisk");
@@ -29,13 +15,8 @@ public class WindowUtility {
     }
 
 
-    /**
-     * Prompts the user to enter a string through a prompt window, then returns that
-     * string for use.
-     *
-     * @param msg The message of the prompt box.
-     * @return The string the user entered.
-     */
+    // Nhắc người chơi nhập chuỗi thông qua cửa sổ --> trả về chuỗi để sử dụng
+    // msg: thông báo của prompt-box
     public static String getEntry(String msg) {
         Runnable runnable =
             (Runnable) Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.asterisk");
@@ -45,14 +26,9 @@ public class WindowUtility {
     }
 
 
-    /**
-     * Asks the user a question through a ask yes or no prompt window. Returns true
-     * if the user selects yes, or no if not.
-     *
-     * @param qu The question to ask the user.
-     * @param title The title of the question window.
-     * @return True if user clicks yes, false if otherwise.
-     */
+    // Ask Yes/No ~ true/false
+    // qu: quests để hỏi người chơi
+    // title: Nội dụng question
     public static boolean askYesNo(String qu, String title) {
         Runnable runnable =
             (Runnable) Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.exclamation");
@@ -63,12 +39,9 @@ public class WindowUtility {
     }
 
 
-    /**
-     * Displays an error window with a message to the user.
-     *
-     * @param msg The error message to display to the user.
-     * @param title The title of the error window.
-     */
+    //Hiển thị error-window với thông báo cho người chơi
+    // msg: thông báo lỗi
+    // title: nội dụng của msg
     public static void errorMessage(String msg, String title) {
         Runnable runnable =
             (Runnable) Toolkit.getDefaultToolkit().getDesktopProperty("win.sound.hand");
@@ -77,4 +50,4 @@ public class WindowUtility {
         JOptionPane.showMessageDialog(null, msg, title, JOptionPane.ERROR_MESSAGE);
     }
 
-} // End WindowUtility class
+}

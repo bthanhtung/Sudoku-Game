@@ -1,15 +1,5 @@
-/**
- * SettingsFrame.java
- * Authors: Lucas Chavarria, Cole Vikupitz, Ron Guo, James Xu
- * -----------------------------------------------------------------------------
- * Class that contains a GUI for the settings menu. Contains a back button that
- * goes back to the MainFrame GUI, and radio buttons for enabling/disabling program
- * settings and features.
- */
 package sudoku;
 
-
-/* Imports */
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import javax.swing.ButtonGroup;
@@ -17,15 +7,15 @@ import javax.swing.JFrame;
 
 public class SettingsFrame extends JFrame {
 
-    /* Declare private members */
+    // Khai báo các biến
     private final ButtonGroup timerGroup, legalMovesGroup, highlighterGroup,
             conflictGroup, hintsGroup, solutionsgroup;
 
 
-    /* Default constructors */
+    // Hàm xây dựng mặc định
     public SettingsFrame(int x, int y) {
 
-        /* Initialize components */
+        // Khởi tạo các thành phần
         initComponents();
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(
                 "icons/sudoku_icon.png")));
@@ -33,7 +23,7 @@ public class SettingsFrame extends JFrame {
         this.setLocation(x, y);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        /* Create the button groups, add the radio buttons */
+        // Tạo các nhóm button, thêm các nút radio
         this.timerGroup = new ButtonGroup();
         this.timerGroup.add(this.timerOn);
         this.timerGroup.add(this.timerOff);
@@ -54,67 +44,64 @@ public class SettingsFrame extends JFrame {
         this.solutionsgroup.add(this.solutionsOff);
         this.initializeSettings();
 
-        /* Asks user if they're sure when closing the window */
+        // Xác nhận khi đóng cửa sổ
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
-                if (WindowUtility.askYesNo("Are you sure you want to quit?",
-                        "Quitting")) {
-                    FileUtility.saveSettings(); /* Saves the setting and times before exiting */
+                if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
+                        "Warning!")) {
+                    FileUtility.saveSettings(); // lưu setting & times trước khi thoát
                     FileUtility.saveBestTimes();
                     System.exit(0);
                 }
             }
         });
 
-        /* Make the UI visible to user */
+        // Hiển thị UI cho người dùng
         this.setVisible(true);
     }
 
 
-    /**
-     * Initializes the radio buttons according to the specified settings in
-     * Settings.java. Enabled settings construct the radio buttons that are
-     * set to 'On', or 'Off' if disabled. Invoked in the constructor when the
-     * user loads the settings menu from the home menu.
-     */
+    // Khởi tạo các radio-button theo cài đặt trong settting.java
+    // Bật = On | Tắt = Off
+    // Được gọi trong contructor khi tải setting-menu từ home-menu
     private void initializeSettings() {
 
-        /* Loads the users settings into Settings.java */
+        // Load cácc setting vào Setting.java
         FileUtility.loadSettings();
 
-        /* Sets the timer on/off */
+        // Bật/tắt timer
         if (Settings.showTimer())
             this.timerOn.setSelected(true);
         else
             this.timerOff.setSelected(true);
 
-        /* Sets legal panel visibility on/off */
+        // Bật/tắt legal-moves
         if (Settings.showLegal())
             this.legalMovesOn.setSelected(true);
         else
             this.legalMovesOff.setSelected(true);
 
-        /* Sets highlighting feature on/off */
+        // Bật/tắt highlighting
         if (Settings.showHighlighted())
             this.highlighterOn.setSelected(true);
         else
             this.highlighterOff.setSelected(true);
 
-        /* Sets illegal highlighting feature on/off */
+        // Bật/tắt illegal highlighting
         if (Settings.showConflictingNumbers())
             this.conflictOn.setSelected(true);
         else
             this.conflictOff.setSelected(true);
 
-        /* Sets hints feature on/off */
+        // Bật/tắt gợi ý
         if (Settings.showHints())
             this.hintsOn.setSelected(true);
         else
             this.hintsOff.setSelected(true);
 
-        /* Sets solutions feature on/off */
+        // Bật/tắt solution
         if (Settings.showSolutions())
             this.solutionsOn.setSelected(true);
         else
@@ -157,24 +144,27 @@ public class SettingsFrame extends JFrame {
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFocusable(false);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
-        backButton.setBackground(new java.awt.Color(153, 153, 153));
+        backButton.setBackground(new java.awt.Color(0, 153, 153));
         backButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         backButton.setText("Back");
+        backButton.setFocusPainted(false);
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 26)); // NOI18N
         jLabel1.setText("Settings");
 
         timerOn.setBackground(new java.awt.Color(255, 255, 204));
         timerOn.setText("On");
+        timerOn.setFocusPainted(false);
         timerOn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 timerOnActionPerformed(evt);
@@ -237,22 +227,22 @@ public class SettingsFrame extends JFrame {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel7.setText("Show Timer:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel2.setText("Show Legal Moves:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel3.setText("Double-Click to Highlight:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel5.setText("Show Illegal Numbers:");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel6.setText("Enable Hints:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel8.setText("Enable Solutions:");
 
         hintsOn.setBackground(new java.awt.Color(255, 255, 204));
@@ -300,7 +290,7 @@ public class SettingsFrame extends JFrame {
                             .addComponent(jLabel5)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(conflictOn)
@@ -333,29 +323,25 @@ public class SettingsFrame extends JFrame {
                             .addComponent(hintsOff)
                             .addComponent(solutionsOff))))
                 .addGap(26, 26, 26))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(162, 162, 162)
-                        .addComponent(backButton)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(148, 148, 148))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(timerOn)
-                            .addComponent(timerOff)
-                            .addComponent(jLabel7))))
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(timerOn)
+                    .addComponent(timerOff)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -485,4 +471,4 @@ public class SettingsFrame extends JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
-} // End SettingsFrame class
+}

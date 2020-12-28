@@ -36,7 +36,7 @@ public class SudokuGenerator {
             InputStream stream = SudokuGenerator.class.getResourceAsStream(i + ".txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-            // Randomvà chọn ngầu nhiên một puzzle từ file
+            // Random và chọn ngầu nhiên một puzzle từ file
             Random r = new Random();
             int k = r.nextInt(10000);
             String line = reader.readLine();

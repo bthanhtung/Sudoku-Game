@@ -1,8 +1,5 @@
 package sudoku;
 
- // http://www.programcreek.com/2014/05/leetcode-sudoku-solver-java/
- // http://www.heimetli.ch/ffh/simplifiedsudoku.html
-
 public class SudokuSolver {
 
     // Khai báo biến

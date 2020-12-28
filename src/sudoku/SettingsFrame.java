@@ -50,7 +50,7 @@ public class SettingsFrame extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
                 if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
-                        "Đang thoát")) {
+                        "Warning!")) {
                     FileUtility.saveSettings(); // lưu setting & times trước khi thoát
                     FileUtility.saveBestTimes();
                     System.exit(0);
@@ -144,24 +144,27 @@ public class SettingsFrame extends JFrame {
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFocusable(false);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
-        backButton.setBackground(new java.awt.Color(153, 153, 153));
+        backButton.setBackground(new java.awt.Color(0, 153, 153));
         backButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         backButton.setText("Back");
+        backButton.setFocusPainted(false);
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 26)); // NOI18N
         jLabel1.setText("Settings");
 
         timerOn.setBackground(new java.awt.Color(255, 255, 204));
         timerOn.setText("On");
+        timerOn.setFocusPainted(false);
         timerOn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 timerOnActionPerformed(evt);
@@ -224,22 +227,22 @@ public class SettingsFrame extends JFrame {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel7.setText("Show Timer:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel2.setText("Show Legal Moves:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel3.setText("Double-Click to Highlight:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel5.setText("Show Illegal Numbers:");
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel6.setText("Enable Hints:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel8.setText("Enable Solutions:");
 
         hintsOn.setBackground(new java.awt.Color(255, 255, 204));
@@ -287,7 +290,7 @@ public class SettingsFrame extends JFrame {
                             .addComponent(jLabel5)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(conflictOn)
@@ -320,29 +323,25 @@ public class SettingsFrame extends JFrame {
                             .addComponent(hintsOff)
                             .addComponent(solutionsOff))))
                 .addGap(26, 26, 26))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(162, 162, 162)
-                        .addComponent(backButton)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(148, 148, 148))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(timerOn)
-                            .addComponent(timerOff)
-                            .addComponent(jLabel7))))
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(timerOn)
+                    .addComponent(timerOff)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -472,4 +471,4 @@ public class SettingsFrame extends JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
-} // End SettingsFrame class
+}

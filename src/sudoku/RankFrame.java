@@ -50,7 +50,7 @@ public class RankFrame extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
                 if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
-                        "Đang thoát...")) {
+                        "Warning!")) {
                     FileUtility.saveBestTimes();
                     System.exit(0);
                 }
@@ -112,8 +112,8 @@ public class RankFrame extends JFrame {
     private void reset() {
 
         // Xác nhận lại
-        if (!WindowUtility.askYesNo("You are about to delete all your best times for this difficulty.\n"
-                + "Are your sure you want to reset?", "Warning!"))
+        if (!WindowUtility.askYesNo("Bạn sẽ xóa hết best-time của mình.\n"
+                + "Bạn chắc chắn muốn reset chứ?", "Warning!"))
             return;
 
         // Chọn bảng để reset
@@ -122,35 +122,35 @@ public class RankFrame extends JFrame {
             return;
 
         switch (i) {
-            case 0: // reset lại bảng novice
+            case 0: // Reset lại bảng novice
                 BestTimes.novice.clear();
                 for (int j = 0; j < 10; j++) {
                     this.noviceTable.setValueAt("", j, 1);
                     this.noviceTable.setValueAt("", j, 2);
                 }
                 break;
-            case 1: // reset lại bảng easy
+            case 1: // Reset lại bảng easy
                 BestTimes.easy.clear();
                 for (int j = 0; j < 10; j++) {
                     this.easyTable.setValueAt("", j, 1);
                     this.easyTable.setValueAt("", j, 2);
                 }
                 break;
-            case 2: // reset lại bảng medium
+            case 2: // Reset lại bảng medium
                 BestTimes.medium.clear();
                 for (int j = 0; j < 10; j++) {
                     this.mediumTable.setValueAt("", j, 1);
                     this.mediumTable.setValueAt("", j, 2);
                 }
                 break;
-            case 3: // reset lại bảng hard
+            case 3: // Reset lại bảng hard
                 BestTimes.hard.clear();
                 for (int j = 0; j < 10; j++) {
                     this.hardTable.setValueAt("", j, 1);
                     this.hardTable.setValueAt("", j, 2);
                 }
                 break;
-            default:    // reset lại bảng expert
+            default:    // Reset lại bảng expert
                 BestTimes.expert.clear();
                 for (int j = 0; j < 10; j++) {
                     this.expertTable.setValueAt("", j, 1);
@@ -187,12 +187,13 @@ public class RankFrame extends JFrame {
         backButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFocusable(false);
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 204));
 
         timesTable.setFocusable(false);
-        timesTable.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        timesTable.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
 
         noviceTable.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         noviceTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -350,12 +351,14 @@ public class RankFrame extends JFrame {
 
         timesTable.addTab("Expert", jScrollPane5);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 26)); // NOI18N
         jLabel1.setText("Best Times");
 
         resetButton.setBackground(new java.awt.Color(255, 153, 153));
         resetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         resetButton.setText("Reset");
+        resetButton.setFocusCycleRoot(true);
+        resetButton.setFocusPainted(false);
         resetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetButtonActionPerformed(evt);
@@ -365,6 +368,8 @@ public class RankFrame extends JFrame {
         backButton.setBackground(new java.awt.Color(153, 153, 153));
         backButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         backButton.setText("Back");
+        backButton.setFocusCycleRoot(true);
+        backButton.setFocusPainted(false);
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backButtonActionPerformed(evt);
@@ -378,30 +383,30 @@ public class RankFrame extends JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addComponent(timesTable, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(175, 175, 175)
-                        .addComponent(backButton)
+                        .addGap(122, 122, 122)
+                        .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
-                        .addComponent(resetButton)))
+                        .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(198, 198, 198)
+                        .addComponent(jLabel1)))
                 .addContainerGap(31, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addGap(27, 27, 27)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(timesTable, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -450,4 +455,4 @@ public class RankFrame extends JFrame {
     // End of variables declaration//GEN-END:variables
     // </editor-fold>
 
-} // End RankFrame class
+}

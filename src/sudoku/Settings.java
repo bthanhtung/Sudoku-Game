@@ -1,6 +1,5 @@
 package sudoku;
 
-
 public class Settings {
 
     // Khai báo các biến thành viên

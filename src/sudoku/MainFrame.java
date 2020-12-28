@@ -12,6 +12,7 @@ public class MainFrame extends JFrame {
 
         // Khởi tạo các thành phần
         initComponents();
+        //FileUtility.loadBestTimes(); // NOTE-NOTE-NOTE
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(
                 "icons/sudoku_icon.png")));
         this.setTitle("Sudoku");
@@ -27,7 +28,7 @@ public class MainFrame extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
                 if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
-                        "Đang thoát...")) {
+                        "Warning!")) {
                     FileUtility.saveBestTimes();
                     System.exit(0);
                 }
@@ -61,6 +62,7 @@ public class MainFrame extends JFrame {
         newButton.setBackground(new java.awt.Color(153, 255, 153));
         newButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         newButton.setText("New Game");
+        newButton.setFocusPainted(false);
         newButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newButtonActionPerformed(evt);
@@ -69,7 +71,7 @@ public class MainFrame extends JFrame {
 
         loadButton.setBackground(new java.awt.Color(255, 255, 153));
         loadButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        loadButton.setText("Continute");
+        loadButton.setText("Continue");
         loadButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadButtonActionPerformed(evt);
@@ -139,19 +141,17 @@ public class MainFrame extends JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(statsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(loadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(statsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 

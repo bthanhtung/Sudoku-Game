@@ -198,7 +198,7 @@ public class SudokuFrame extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
                 if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
-                        "Đang thoát...")) {
+                        "Warning!")) {
                     BestTimes.time = seconds;
                     FileUtility.saveGame(puzzle, puzzle.getDifficulty(), path);
                     FileUtility.saveBestTimes();
@@ -241,11 +241,12 @@ public class SudokuFrame extends JFrame {
 //        g2d.draw(new Line2D.Float(327, 136, 327, 568));
 //        g2d.draw(new Line2D.Float(38, 281, 468, 281));
 //        g2d.draw(new Line2D.Float(38, 425, 468, 425));
-        g2d.drawRect(45, 140, 440, 444); // vuông
-        g2d.draw(new Line2D.Float(193, 143, 193, 581)); // dọc 1
-        g2d.draw(new Line2D.Float(337, 143, 337, 581)); // dọc 2
-        g2d.draw(new Line2D.Float(48, 289, 482, 289)); // ngang 1
-        g2d.draw(new Line2D.Float(48, 432, 482, 432)); // ngang 2
+//        g2d.drawRect(45, 140, 440, 444); // vuông
+        g2d.drawRect(35, 95, 435, 433); // vuông | trái-trên-phải-dưới
+        g2d.draw(new Line2D.Float(180, 95, 180, 528)); // dọc 1
+        g2d.draw(new Line2D.Float(324, 95, 324, 528)); // dọc 2
+        g2d.draw(new Line2D.Float(35, 238, 470, 238)); // ngang 1
+        g2d.draw(new Line2D.Float(35, 383, 470, 383)); // ngang 2
 
     }
 
@@ -388,13 +389,13 @@ public class SudokuFrame extends JFrame {
             this.completeField.setText("Complete!");
 
             // Hiển thị message and time
-            // Chỉ thêm vào best-time nếu người chơi không dunfg tới tính năng solution hoặc là custom puzzle
+            // Chỉ thêm vào best-time nếu người chơi không dùng tới tính năng solution hoặc là custom puzzle
             String s = "";
             if (flag && this.loop)
                 if (BestTimes.insertBestTime(this.seconds, this.difficulty))
                     s += "\nKỷ lục mới!";
             WindowUtility.displayInfo("Bạn đã giải được Puzzle rồi hihi!\nTime: " +
-                    this.timeToString() + s, "Congratulations nha...!");
+                    this.timeToString() + s, "Congratulations.!");
             
             if(WindowUtility.askYesNo("Bạn có muốn tiếp tục không...?", "Warning!")){
                 if (!this.loop) {
@@ -406,7 +407,6 @@ public class SudokuFrame extends JFrame {
                 
                 
             } else {
-            // New-game nếu không phải là custom puzzle
             MainFrame f = new MainFrame(this.getX(), this.getY());
                 this.dispose();
             }
@@ -516,8 +516,8 @@ public class SudokuFrame extends JFrame {
     private void newGame() {
 
         // Không áp dụng nếu đây là custom-puzzle
-        if (!this.loop)
-            return;
+//        if (!this.loop)
+//            return;
 
         // Get puzzle mới
         SudokuGenerator gen = new SudokuGenerator(this.difficulty);
@@ -526,7 +526,7 @@ public class SudokuFrame extends JFrame {
 
         // Xác nhận xem người chơi có chắc là puzzle hiện tại chưa complete
         if (this.completeField.getForeground() != GUIColors.DARK_GREEN) {
-            if (WindowUtility.askYesNo("You will lose your current progress on this puzzle.\n"
+            if (WindowUtility.askYesNo("Bạn sẽ thua game hiện tại.\n"
                     + "Có chắc bạn muốn New-game chứ?", "Warning!")) {
                 this.initializeTable();
                 this.resetTimer();
@@ -563,11 +563,11 @@ public class SudokuFrame extends JFrame {
             // Hủy timer
             this.timer.cancel();
             this.timer.purge();
-//            if (this.loop) {    // Về memnu chính
+            if (this.loop) {    // Về memnu chính
                 MainFrame f = new MainFrame(this.getX(), this.getY());
 //            } else {    // Về puzzle menu
 //                PuzzlesFrame f = new PuzzlesFrame(this.getX(), this.getY());
-//            }
+            }
             this.dispose();
         }
     }
@@ -868,16 +868,12 @@ public class SudokuFrame extends JFrame {
         TimeLabel1 = new javax.swing.JLabel();
         jScrollPane93 = new javax.swing.JScrollPane();
         difficultyField = new javax.swing.JTextPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        OptionsMenu = new javax.swing.JMenu();
-        NewGameOption = new javax.swing.JMenuItem();
-        ResetGameOption = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        QuitOption = new javax.swing.JMenuItem();
-        HelpMenu = new javax.swing.JMenu();
-        GetHintOption = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        SolveOption = new javax.swing.JMenuItem();
+        NewGameButton = new javax.swing.JButton();
+        ResetButton = new javax.swing.JButton();
+        QuitButton = new javax.swing.JButton();
+        GetHintButton = new javax.swing.JButton();
+        SolverButton = new javax.swing.JButton();
+        TimeLabel2 = new javax.swing.JLabel();
 
         jMenu2.setText("File");
         jMenuBar2.add(jMenu2);
@@ -890,7 +886,10 @@ public class SudokuFrame extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sudoku");
+        setBackground(new java.awt.Color(153, 255, 153));
+        setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(180, 180, 180));
 
@@ -1687,6 +1686,8 @@ public class SudokuFrame extends JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 58, -1, -1));
+
         jPanel2.setBackground(new java.awt.Color(204, 204, 255));
 
         legalTwo.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
@@ -1752,17 +1753,17 @@ public class SudokuFrame extends JFrame {
         legalEight.setHighlighter(null);
         jScrollPane85.setViewportView(legalEight);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Legal Moves");
+        jLabel1.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        jLabel1.setText("Legal Moves:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jScrollPane46, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                             .addComponent(jScrollPane83, javax.swing.GroupLayout.Alignment.LEADING)
@@ -1783,6 +1784,8 @@ public class SudokuFrame extends JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane90, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1790,31 +1793,33 @@ public class SudokuFrame extends JFrame {
                         .addComponent(jScrollPane89, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane88, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane86, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane87, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane85, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane46, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane83, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane84, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jScrollPane86, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane87, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane85, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jScrollPane46, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane83, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jScrollPane84, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 170, -1, -1));
 
         statusField.setEditable(false);
         statusField.setBackground(new java.awt.Color(204, 204, 255));
         statusField.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        statusField.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         statusField.setFocusable(false);
         statusField.setHighlighter(null);
         jScrollPane91.setViewportView(statusField);
+
+        getContentPane().add(jScrollPane91, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 22, 220, -1));
 
         completeField.setEditable(false);
         completeField.setBackground(new java.awt.Color(204, 204, 255));
@@ -1823,14 +1828,19 @@ public class SudokuFrame extends JFrame {
         completeField.setHighlighter(null);
         jScrollPane92.setViewportView(completeField);
 
+        getContentPane().add(jScrollPane92, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 22, 110, -1));
+
         timeField.setEditable(false);
         timeField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         timeField.setFocusable(false);
         timeField.setHighlighter(null);
         jScrollPane94.setViewportView(timeField);
 
-        TimeLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        TimeLabel1.setText("Time:");
+        getContentPane().add(jScrollPane94, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 80, -1));
+
+        TimeLabel1.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        TimeLabel1.setText("Level:");
+        getContentPane().add(TimeLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, -1, 25));
 
         difficultyField.setEditable(false);
         difficultyField.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1838,135 +1848,97 @@ public class SudokuFrame extends JFrame {
         difficultyField.setHighlighter(null);
         jScrollPane93.setViewportView(difficultyField);
 
-        OptionsMenu.setText("Options");
+        getContentPane().add(jScrollPane93, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 130, 83, -1));
 
-        NewGameOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/new_puzzle_icon.png"))); // NOI18N
-        NewGameOption.setText("   New Game");
-        NewGameOption.addActionListener(new java.awt.event.ActionListener() {
+        NewGameButton.setBackground(new java.awt.Color(153, 255, 153));
+        NewGameButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        NewGameButton.setText("New Game");
+        NewGameButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewGameOptionActionPerformed(evt);
+                NewGameButtonActionPerformed(evt);
             }
         });
-        OptionsMenu.add(NewGameOption);
+        getContentPane().add(NewGameButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 115, 43));
 
-        ResetGameOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/restart_icon.png"))); // NOI18N
-        ResetGameOption.setText("   Reset Game");
-        ResetGameOption.addActionListener(new java.awt.event.ActionListener() {
+        ResetButton.setBackground(new java.awt.Color(255, 255, 153));
+        ResetButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        ResetButton.setText("Reset Game");
+        ResetButton.setPreferredSize(new java.awt.Dimension(107, 25));
+        ResetButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ResetGameOptionActionPerformed(evt);
+                ResetButtonActionPerformed(evt);
             }
         });
-        OptionsMenu.add(ResetGameOption);
-        OptionsMenu.add(jSeparator1);
+        getContentPane().add(ResetButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 510, 120, 43));
 
-        QuitOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/close_icon.png"))); // NOI18N
-        QuitOption.setText("   Quit");
-        QuitOption.addActionListener(new java.awt.event.ActionListener() {
+        QuitButton.setBackground(new java.awt.Color(153, 153, 255));
+        QuitButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        QuitButton.setText("Quit Game");
+        QuitButton.setMaximumSize(new java.awt.Dimension(95, 25));
+        QuitButton.setMinimumSize(new java.awt.Dimension(95, 25));
+        QuitButton.setPreferredSize(new java.awt.Dimension(95, 25));
+        QuitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                QuitOptionActionPerformed(evt);
+                QuitButtonActionPerformed(evt);
             }
         });
-        OptionsMenu.add(QuitOption);
+        getContentPane().add(QuitButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 510, 115, 43));
 
-        jMenuBar1.add(OptionsMenu);
-
-        HelpMenu.setText("Help");
-
-        GetHintOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/hint_icon.png"))); // NOI18N
-        GetHintOption.setText("   Get Hint");
-        GetHintOption.addActionListener(new java.awt.event.ActionListener() {
+        GetHintButton.setBackground(new java.awt.Color(255, 204, 102));
+        GetHintButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        GetHintButton.setText("Get Hint");
+        GetHintButton.setPreferredSize(new java.awt.Dimension(107, 25));
+        GetHintButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GetHintOptionActionPerformed(evt);
+                GetHintButtonActionPerformed(evt);
             }
         });
-        HelpMenu.add(GetHintOption);
-        HelpMenu.add(jSeparator2);
+        getContentPane().add(GetHintButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(487, 362, 115, 43));
 
-        SolveOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sudoku/icons/solution_icon.png"))); // NOI18N
-        SolveOption.setText("   Solve Puzzle");
-        SolveOption.addActionListener(new java.awt.event.ActionListener() {
+        SolverButton.setBackground(new java.awt.Color(255, 155, 153));
+        SolverButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        SolverButton.setText("Get Solver");
+        SolverButton.setPreferredSize(new java.awt.Dimension(107, 25));
+        SolverButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SolveOptionActionPerformed(evt);
+                SolverButtonActionPerformed(evt);
             }
         });
-        HelpMenu.add(SolveOption);
+        getContentPane().add(SolverButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(487, 431, 115, 43));
 
-        jMenuBar1.add(HelpMenu);
-
-        setJMenuBar(jMenuBar1);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane91, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane92, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane93, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(153, 153, 153)
-                        .addComponent(TimeLabel1)
-                        .addGap(36, 36, 36)
-                        .addComponent(jScrollPane94, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 46, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TimeLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane94, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane92, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane91, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(55, 55, 55))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(147, 147, 147)
-                .addComponent(jScrollPane93, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        TimeLabel2.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        TimeLabel2.setText("Time:");
+        getContentPane().add(TimeLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 30, -1, 25));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // <editor-fold defaultstate="collapsed" desc="Menu Action Event Handlers">
-    /* Starts a new game */
-    private void NewGameOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewGameOptionActionPerformed
+    private void NewGameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewGameButtonActionPerformed
+        // TODO add your handling code here:
         this.newGame();
-    }//GEN-LAST:event_NewGameOptionActionPerformed
-    /* Resets the game back to its initial state */
-    private void ResetGameOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetGameOptionActionPerformed
-        if (WindowUtility.askYesNo("Are you sure you want to reset the game?", "Warning!"))
+    }//GEN-LAST:event_NewGameButtonActionPerformed
+
+    private void ResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetButtonActionPerformed
+        // TODO add your handling code here:
+        if (WindowUtility.askYesNo("Bạn có muốn reset lại game này?", "Warning!"))
             this.resetGame();
-    }//GEN-LAST:event_ResetGameOptionActionPerformed
-    /* Quits out of the game */
-    private void QuitOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitOptionActionPerformed
+    }//GEN-LAST:event_ResetButtonActionPerformed
+
+    private void QuitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitButtonActionPerformed
+        // TODO add your handling code here:
         this.quit();
-    }//GEN-LAST:event_QuitOptionActionPerformed
-    /* Invoked when the solution is requested */
-    private void SolveOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolveOptionActionPerformed
-        this.getSolution();
-    }//GEN-LAST:event_SolveOptionActionPerformed
-    /* Invoked when a hint is requested */
-    private void GetHintOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GetHintOptionActionPerformed
+    }//GEN-LAST:event_QuitButtonActionPerformed
+
+    private void GetHintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GetHintButtonActionPerformed
+        // TODO add your handling code here:
         this.getHint();
-    }//GEN-LAST:event_GetHintOptionActionPerformed
+    }//GEN-LAST:event_GetHintButtonActionPerformed
+
+    private void SolverButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SolverButtonActionPerformed
+        // TODO add your handling code here:
+        this.getSolution();
+//        puzzle.print();
+    }//GEN-LAST:event_SolverButtonActionPerformed
     // </editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" Component Declarations">
@@ -2034,7 +2006,7 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JTextPane G7;
     private javax.swing.JTextPane G8;
     private javax.swing.JTextPane G9;
-    private javax.swing.JMenuItem GetHintOption;
+    private javax.swing.JButton GetHintButton;
     private javax.swing.JTextPane H1;
     private javax.swing.JTextPane H2;
     private javax.swing.JTextPane H3;
@@ -2044,7 +2016,6 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JTextPane H7;
     private javax.swing.JTextPane H8;
     private javax.swing.JTextPane H9;
-    private javax.swing.JMenu HelpMenu;
     private javax.swing.JTextPane I1;
     private javax.swing.JTextPane I2;
     private javax.swing.JTextPane I3;
@@ -2054,19 +2025,18 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JTextPane I7;
     private javax.swing.JTextPane I8;
     private javax.swing.JTextPane I9;
-    private javax.swing.JMenuItem NewGameOption;
-    private javax.swing.JMenu OptionsMenu;
-    private javax.swing.JMenuItem QuitOption;
-    private javax.swing.JMenuItem ResetGameOption;
-    private javax.swing.JMenuItem SolveOption;
+    private javax.swing.JButton NewGameButton;
+    private javax.swing.JButton QuitButton;
+    private javax.swing.JButton ResetButton;
+    private javax.swing.JButton SolverButton;
     private javax.swing.JLabel TimeLabel1;
+    private javax.swing.JLabel TimeLabel2;
     private javax.swing.JTextPane completeField;
     private javax.swing.JTextPane difficultyField;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -2164,8 +2134,6 @@ public class SudokuFrame extends JFrame {
     private javax.swing.JScrollPane jScrollPane92;
     private javax.swing.JScrollPane jScrollPane93;
     private javax.swing.JScrollPane jScrollPane94;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JTextPane legalEight;
     private javax.swing.JTextPane legalFive;
     private javax.swing.JTextPane legalFour;
@@ -2180,4 +2148,4 @@ public class SudokuFrame extends JFrame {
     // End of variables declaration//GEN-END:variables
 //</editor-fold>
 
-} // End SudokuFrame class
+}

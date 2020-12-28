@@ -1,6 +1,5 @@
 package sudoku;
 
-
 public class SudokuPuzzle {
 
     // Khai báo các biến private
@@ -234,7 +233,6 @@ public class SudokuPuzzle {
 
     // Đặt trạng thái ban đầu của Sudoku
     // s: trạng thái ban đầu đề đặt puzzle
-
     protected void setInitialPuzzleState(String s) {
         this.initialState = s;
     }
@@ -361,7 +359,7 @@ public class SudokuPuzzle {
         return list;
     }
 
-    // Trả về mộtt mảng hợp lệ trong sub-grid
+    // Trả về một mảng hợp lệ trong sub-grid
     private boolean[] legalMovesInSubGrid(int r, int c, boolean[] list) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {

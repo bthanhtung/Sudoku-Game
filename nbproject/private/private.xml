@@ -12,7 +12,14 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/1.txt</file>
             <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/SudokuFrame.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/SudokuSolver.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/SudokuPuzzle.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/SudokuGenerator.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/MainFrame.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/FileUtility.java</file>
+            <file>file:/F:/sudoku_java/Sudoku-ver1/Sudoku-master/src/sudoku/Main.java</file>
         </group>
     </open-files>
 </project-private>

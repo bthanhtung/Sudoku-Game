@@ -23,7 +23,7 @@ public class LevelFrame extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent we) {
                 if (WindowUtility.askYesNo("Có chắc là bạn muốn thoát chứ?",
-                        "Đang thoát...")) {
+                        "Warning!")) {
                     FileUtility.saveBestTimes();
                     System.exit(0);
                 }
@@ -52,7 +52,7 @@ public class LevelFrame extends JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 204));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
         jLabel1.setText("Choose a Difficulty");
 
         hardButton.setBackground(new java.awt.Color(255, 153, 51));
@@ -85,6 +85,8 @@ public class LevelFrame extends JFrame {
         noviceButton.setBackground(new java.awt.Color(51, 204, 255));
         noviceButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         noviceButton.setText("Novice");
+        noviceButton.setFocusCycleRoot(true);
+        noviceButton.setFocusPainted(false);
         noviceButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 noviceButtonActionPerformed(evt);
@@ -116,9 +118,6 @@ public class LevelFrame extends JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(jLabel1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -127,8 +126,11 @@ public class LevelFrame extends JFrame {
                                 .addComponent(easyButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(noviceButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(hardButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(expertButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addContainerGap(72, Short.MAX_VALUE))
+                                .addComponent(expertButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jLabel1)))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,7 +147,7 @@ public class LevelFrame extends JFrame {
                 .addComponent(hardButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(expertButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(backButton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
         );

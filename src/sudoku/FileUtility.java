@@ -18,18 +18,19 @@ public class FileUtility {
     // Đường dẫn nơi lưu file trò chơi, best-time và puzzle
     protected static final String PATH = System.getProperty("user.home") +
             System.getProperty("file.separator") + "Sudoku" + System.getProperty("file.separator");
-    protected static final String MY_PUZZLES_PATH = FileUtility.PATH + "My Puzzles" +
-            System.getProperty("file.separator");
+    
+//    protected static final String MY_PUZZLES_PATH = FileUtility.PATH + "My Puzzles" +
+//            System.getProperty("file.separator");
 
 
-    //Lưu Sudoku puzzle vào một tệp lưu trong đường dẫn thư mục được chỉ định 
+    // Lưu Sudoku puzzle vào một tệp lưu trong đường dẫn thư mục được chỉ định 
     // cũng như độ khó của nó, để tải và tiếp tục chơi trò chơi sau này.
     // p: sudoku puzzle để save.
     // difficulty: độ khó.
     // path: đường dẫn đầy đủ để lưu puzzle
     protected static void saveGame(SudokuPuzzle p, int difficulty, String path) {
 
-        // Nếu puzzlel = null --> null
+        // Nếu puzzle = null --> null
         if (p == null) {
             WindowUtility.errorMessage("Có lỗi xảy ra khi lưu Puzzle rồi !",
                     "Lỗi khi lưu Puzzle");
@@ -203,12 +204,6 @@ public class FileUtility {
             return flag;
         }
     }
-
-
-    /**
-     * Loads the program's settings from the save file 'settings.txt', sets the
-     * program's settings as specified.
-     */
     
     // Tải cài đặt của chương trình từ tệp lưu 'settings.txt'
     // đặt cài đặt của chương trình như được chỉ định.
@@ -236,7 +231,7 @@ public class FileUtility {
             else
                 Settings.showHighlighted(false);
 
-            // Read setting để highlighting số không hợp lêk (illegal numbers)
+            // Read setting để highlighting số không hợp lệ (illegal numbers)
             if (reader.readLine().equals("true"))
                 Settings.showConflictingNumbers(true);
             else
